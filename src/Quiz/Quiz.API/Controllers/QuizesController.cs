@@ -53,5 +53,23 @@ namespace Quiz.API.Controllers
             response.Headers.Location = new Uri(Request.RequestUri, Url.Route("DefaultApi", new {controller="quizes", id=quiz.Id }));
             return response;
         }
+
+        // DELETE api/quizes/{quizid} 
+        [SwaggerOperation("DeleteQuiz")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.NotFound)]
+        public HttpResponseMessage Delete(string id)
+        {
+            var quiz = repo.FindQuiz(id);
+            if (quiz == null)
+            {   // Not found:                
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            else
+            {   // Found:
+                repo.RemoveQuiz(id);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+        }
     }
 }
