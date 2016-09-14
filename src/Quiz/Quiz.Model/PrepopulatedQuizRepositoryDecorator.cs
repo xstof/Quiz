@@ -71,5 +71,10 @@ namespace Quiz.Model
         {
             repo.RemoveQuiz(id);
         }
+
+        public QuizQuestion FindQuestion(string quizId, string questionId)
+        {
+            return repo.FindQuestion(quizId, questionId);
+        }
     }
 }

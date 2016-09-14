@@ -10,6 +10,7 @@ namespace Quiz.Model
         Quiz FindQuiz(string id);        
         void RemoveQuiz(string id);
         IEnumerable<QuizQuestion> QuestionsForQuiz(string quizId);
+        QuizQuestion FindQuestion(string quizId, string questionId);
         void RemoveQuestionFromQuiz(string quizId, string questionId);
     }
 }

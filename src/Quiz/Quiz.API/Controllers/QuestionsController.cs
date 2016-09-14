@@ -35,9 +35,70 @@ namespace Quiz.API.Controllers
                 var response = Request.CreateResponse(HttpStatusCode.OK, questions);
                 return response;
             }
+        }
+
+        // GET api/quizes/{quizid}/questions/{questionid}
+        [SwaggerOperation("GetQuizQuestion")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.NotFound)]
+        [Route("quizes/{quizid}/questions/{questionid}")]
+        public HttpResponseMessage Get(string quizid, string questionid)
+        {
+            var quiz = repo.FindQuiz(quizid);
+            if (quiz == null)
+            {   // Quiz not found:                
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            var question = repo.FindQuestion(quizid, questionid);
+
+            if (question == null)
+            {   // Question not found:
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
             
+            return Request.CreateResponse(HttpStatusCode.OK, question);
         }
 
         // POST api/quizes/{quizid}/questions
+        [SwaggerOperation("AddQuizQuestion")]
+        [SwaggerResponse(HttpStatusCode.NotFound)]
+        [SwaggerResponse(HttpStatusCode.Created)]
+        [Route("quizes/{quizid}/questions")]
+        public HttpResponseMessage Post(string quizid, [FromBody] Model.QuizQuestion question)
+        {
+            var quiz = repo.FindQuiz(quizid);
+            if (quiz == null)
+            {   // Not found:                
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            else
+            {   // Found:
+                var questions = repo.AddQuestionToQuiz(quizid, question);
+                var response = Request.CreateResponse(HttpStatusCode.Created);
+                response.Headers.Location = new Uri(Request.RequestUri, Url.Route("DefaultApi", new { controller = "questions", quizid = quiz.Id }));
+                return response;
+            }
+        }
+
+        // DELETE api/quizes/{quizid}/questions/{questionid}
+        [SwaggerOperation("DeleteQuizQuestion")]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.NotFound)]
+        [Route("quizes/{quizid}/questions/{questionid}")]
+        public HttpResponseMessage Delete(string quizid, string questionid)
+        {
+            var quiz = repo.FindQuiz(quizid);
+            if (quiz == null)
+            {   // Quiz not found:                
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }            
+            else if(repo.FindQuestion(quizid, questionid) == null)
+            {   // Question not found:
+                return Request.CreateResponse(HttpStatusCode.NotFound);                
+            }
+
+            repo.RemoveQuestionFromQuiz(quizid, questionid);
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
     }
 }

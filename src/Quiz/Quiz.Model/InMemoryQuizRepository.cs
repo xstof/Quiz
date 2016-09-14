@@ -54,6 +54,8 @@ namespace Quiz.Model
             {
                 throw new InvalidOperationException("Cannot find question to remove.");
             }
+            var question = quizes[quizId].Questions.First(q => q.Id == questionId);
+            quizes[quizId].Questions.Remove(question);
         }
 
         public Quiz FindQuiz(string id)
@@ -71,6 +73,16 @@ namespace Quiz.Model
             }
 
             return quizes[quizId].Questions;
+        }
+
+        public QuizQuestion FindQuestion(string quizId, string questionId)
+        {
+            if (!quizes.ContainsKey(quizId))
+            {
+                throw new InvalidOperationException("Cannot retrieve question from quiz that doesnt exist.");
+            }
+
+            return quizes[quizId].Questions.FirstOrDefault(q => q.Id == questionId);
         }
     }
 }
