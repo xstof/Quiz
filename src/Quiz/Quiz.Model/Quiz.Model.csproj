@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IQuizRepository.cs" />
+    <Compile Include="PrepopulatedQuizRepositoryDecorator.cs" />
     <Compile Include="QuizQuestion.cs" />
     <Compile Include="Quiz.cs" />
     <Compile Include="QuizQuestionChoice.cs" />

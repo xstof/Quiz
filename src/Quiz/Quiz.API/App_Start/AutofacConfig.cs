@@ -7,7 +7,10 @@ namespace Quiz.API
     {
         public static void Register(ContainerBuilder builder)
         {
-            builder.RegisterType<InMemoryQuizRepository>().As<IQuizRepository>().SingleInstance();
+            builder.RegisterType<InMemoryQuizRepository>().Named<IQuizRepository>("innerrepo").SingleInstance();
+            builder.Register(c => new PrepopulatedQuizRepositoryDecorator(c.ResolveNamed<IQuizRepository>("innerrepo")))
+                   .As<IQuizRepository>().SingleInstance();
+
         }
     }
 }

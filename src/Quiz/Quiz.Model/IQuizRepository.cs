@@ -7,8 +7,9 @@ namespace Quiz.Model
         IEnumerable<Quiz> AllQuizes();
         QuizQuestion AddQuestionToQuiz(string quizId, QuizQuestion question);
         Quiz CreateNewQuiz(Quiz quiz);
-        Quiz FindQuiz(string id);
-        void RemoveQuestionFromQuiz(string quizId, string questionId);
+        Quiz FindQuiz(string id);        
         void RemoveQuiz(string id);
+        IEnumerable<QuizQuestion> QuestionsForQuiz(string quizId);
+        void RemoveQuestionFromQuiz(string quizId, string questionId);
     }
 }

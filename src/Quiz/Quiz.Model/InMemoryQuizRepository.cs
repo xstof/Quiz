@@ -40,7 +40,7 @@ namespace Quiz.Model
             }
 
             var questionId = question.EnsureId();
-            quizes[quizId].Questions.Add(questionId, question);
+            quizes[quizId].Questions.Add(question);
             return question;
         }
 
@@ -50,7 +50,7 @@ namespace Quiz.Model
             {
                 throw new InvalidOperationException("Cannot remove question from quiz that doesnt exist.");
             }
-            if (!quizes[quizId].Questions.ContainsKey(questionId))
+            if (!quizes[quizId].Questions.Any(q => q.Id == questionId))
             {
                 throw new InvalidOperationException("Cannot find question to remove.");
             }
@@ -63,6 +63,14 @@ namespace Quiz.Model
             return quizes[id];
         }
 
-       
+        public IEnumerable<QuizQuestion> QuestionsForQuiz(string quizId)
+        {
+            if (!quizes.ContainsKey(quizId))
+            {
+                throw new InvalidOperationException("Cannot retrieve questions from quiz that doesnt exist.");
+            }
+
+            return quizes[quizId].Questions;
+        }
     }
 }

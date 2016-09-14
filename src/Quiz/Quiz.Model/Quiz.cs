@@ -10,12 +10,12 @@ namespace Quiz.Model
     {
         public Quiz()
         {
-            this.Questions = new Dictionary<string, QuizQuestion>();
+            this.Questions = new List<QuizQuestion>();
         }
 
         public string Id { get; set; }
         public string Name { get; set; }
-        public Dictionary<string, QuizQuestion> Questions { get; set; }
+        public List<QuizQuestion> Questions { get; set; }
     }
 
     public static class QuizExtensions

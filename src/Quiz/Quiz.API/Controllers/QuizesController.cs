@@ -70,6 +70,6 @@ namespace Quiz.API.Controllers
                 repo.RemoveQuiz(id);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
-        }
+        }        
     }
 }
