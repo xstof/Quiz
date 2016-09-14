@@ -10,6 +10,11 @@ namespace Quiz.Model
     {
         private static Dictionary<string, Quiz> quizes = new Dictionary<string, Quiz>();
 
+        public IEnumerable<Quiz> AllQuizes()
+        {
+            return quizes.Values.ToList();
+        }
+
         public Quiz CreateNewQuiz(Quiz quiz)
         {
             if (String.IsNullOrWhiteSpace(quiz.Id)) { quiz.Id = System.Guid.NewGuid().ToString(); }
