@@ -32,8 +32,38 @@ namespace Quiz.Model
                 Choices = new List<QuizQuestionChoice>()
                  {
                      new QuizQuestionChoice() { Choice = "A deployment slot provides the option to stage deployments before moving them in production." },
-                     new QuizQuestionChoice() { Choice = "A deployment slot allows to test in production by routing part of traffic to a different deployment." }
-                 }
+                     new QuizQuestionChoice() { Choice = "A deployment slot allows to test in production by routing part of traffic to a different deployment." },
+                     new QuizQuestionChoice() { Choice = "A deployment slot allows an application to scale better." }
+                 }, CorrectAnswer = 2
+            });
+
+            repo.AddQuestionToQuiz(quiz.Id, new QuizQuestion()
+            {
+                Id = "1",
+                Question = "What continous deployment option is not supported?",
+                Choices = new List<QuizQuestionChoice>()
+                 {
+                     new QuizQuestionChoice() { Choice = "GitHub" },
+                     new QuizQuestionChoice() { Choice = "Visual Studio Team Services" },
+                     new QuizQuestionChoice() { Choice = "BitBucket" },
+                     new QuizQuestionChoice() { Choice = "OneDrive" },
+                     new QuizQuestionChoice() { Choice = "DropBox" },
+                     new QuizQuestionChoice() { Choice = "Google Drive" }
+                 }, CorrectAnswer = 5
+            });
+
+            repo.AddQuestionToQuiz(quiz.Id, new QuizQuestion()
+            {
+                Id = "2",
+                Question = "What is not true about KUDU?",
+                Choices = new List<QuizQuestionChoice>()
+                 {
+                     new QuizQuestionChoice() { Choice = "A Kudu is a south african animal?" },
+                     new QuizQuestionChoice() { Choice = "Kudu is the engine behind git deployments in Azure." },
+                     new QuizQuestionChoice() { Choice = "Kudu can be ran outside of Azure." },
+                     new QuizQuestionChoice() { Choice = "Kudu is open source" }
+                 },
+                CorrectAnswer = 0
             });
         }
 

@@ -41,7 +41,7 @@ namespace Quiz.API.Controllers
         [SwaggerOperation("GetQuizQuestion")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
-        [Route("quizes/{quizid}/questions/{questionid}")]
+        [Route("quizes/{quizid}/questions/{questionid}", Name = "getsinglequestion")]
         public HttpResponseMessage Get(string quizid, string questionid)
         {
             var quiz = repo.FindQuiz(quizid);
@@ -75,7 +75,7 @@ namespace Quiz.API.Controllers
             {   // Found:
                 var questions = repo.AddQuestionToQuiz(quizid, question);
                 var response = Request.CreateResponse(HttpStatusCode.Created);
-                response.Headers.Location = new Uri(Request.RequestUri, Url.Route("DefaultApi", new { controller = "questions", quizid = quiz.Id }));
+                response.Headers.Location = new Uri(Request.RequestUri, Url.Route("getsinglequestion", new { questionid = question.Id }));
                 return response;
             }
         }
