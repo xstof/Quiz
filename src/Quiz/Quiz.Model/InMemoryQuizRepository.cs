@@ -17,8 +17,8 @@ namespace Quiz.Model
 
         public Quiz CreateNewQuiz(Quiz quiz)
         {
-            if (String.IsNullOrWhiteSpace(quiz.Id)) { quiz.Id = System.Guid.NewGuid().ToString(); }
-            quizes.Add(quiz.Id, quiz);
+            var quizId = quiz.EnsureId();
+            quizes.Add(quizId, quiz);
 
             return quiz;
         }
