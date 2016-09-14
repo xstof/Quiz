@@ -29,11 +29,11 @@ namespace Quiz.Model
             {
                 Id = "0",
                 Question = "What not true about a deployment slot?",
-                Choices = new List<QuizQuestionChoice>()
+                Choices = new List<QuestionChoice>()
                  {
-                     new QuizQuestionChoice() { Choice = "A deployment slot provides the option to stage deployments before moving them in production." },
-                     new QuizQuestionChoice() { Choice = "A deployment slot allows to test in production by routing part of traffic to a different deployment." },
-                     new QuizQuestionChoice() { Choice = "A deployment slot allows an application to scale better." }
+                     new QuestionChoice() { Choice = "A deployment slot provides the option to stage deployments before moving them in production." },
+                     new QuestionChoice() { Choice = "A deployment slot allows to test in production by routing part of traffic to a different deployment." },
+                     new QuestionChoice() { Choice = "A deployment slot allows an application to scale better." }
                  }, CorrectAnswer = 2
             });
 
@@ -41,14 +41,14 @@ namespace Quiz.Model
             {
                 Id = "1",
                 Question = "What continous deployment option is not supported?",
-                Choices = new List<QuizQuestionChoice>()
+                Choices = new List<QuestionChoice>()
                  {
-                     new QuizQuestionChoice() { Choice = "GitHub" },
-                     new QuizQuestionChoice() { Choice = "Visual Studio Team Services" },
-                     new QuizQuestionChoice() { Choice = "BitBucket" },
-                     new QuizQuestionChoice() { Choice = "OneDrive" },
-                     new QuizQuestionChoice() { Choice = "DropBox" },
-                     new QuizQuestionChoice() { Choice = "Google Drive" }
+                     new QuestionChoice() { Choice = "GitHub" },
+                     new QuestionChoice() { Choice = "Visual Studio Team Services" },
+                     new QuestionChoice() { Choice = "BitBucket" },
+                     new QuestionChoice() { Choice = "OneDrive" },
+                     new QuestionChoice() { Choice = "DropBox" },
+                     new QuestionChoice() { Choice = "Google Drive" }
                  }, CorrectAnswer = 5
             });
 
@@ -56,12 +56,12 @@ namespace Quiz.Model
             {
                 Id = "2",
                 Question = "What is not true about KUDU?",
-                Choices = new List<QuizQuestionChoice>()
+                Choices = new List<QuestionChoice>()
                  {
-                     new QuizQuestionChoice() { Choice = "A Kudu is a south african animal?" },
-                     new QuizQuestionChoice() { Choice = "Kudu is the engine behind git deployments in Azure." },
-                     new QuizQuestionChoice() { Choice = "Kudu can be ran outside of Azure." },
-                     new QuizQuestionChoice() { Choice = "Kudu is open source" }
+                     new QuestionChoice() { Choice = "A Kudu is a south african animal?" },
+                     new QuestionChoice() { Choice = "Kudu is the engine behind git deployments in Azure." },
+                     new QuestionChoice() { Choice = "Kudu can be ran outside of Azure." },
+                     new QuestionChoice() { Choice = "Kudu is open source" }
                  },
                 CorrectAnswer = 0
             });

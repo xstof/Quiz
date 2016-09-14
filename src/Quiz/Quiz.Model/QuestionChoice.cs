@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Quiz.Model
 {
-    public class QuizQuestionChoice
+    public class QuestionChoice
     {
         public string Choice { get; set; }
 

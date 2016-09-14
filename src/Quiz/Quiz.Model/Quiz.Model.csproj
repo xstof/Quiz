@@ -40,11 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attempt.cs" />
+    <Compile Include="AttemptQuestion.cs" />
+    <Compile Include="IAttemptRepository.cs" />
+    <Compile Include="InMemoryAttemptRepository.cs" />
     <Compile Include="IQuizRepository.cs" />
     <Compile Include="PrepopulatedQuizRepositoryDecorator.cs" />
     <Compile Include="QuizQuestion.cs" />
     <Compile Include="Quiz.cs" />
-    <Compile Include="QuizQuestionChoice.cs" />
+    <Compile Include="QuestionChoice.cs" />
     <Compile Include="InMemoryQuizRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -10,7 +10,7 @@ namespace Quiz.Model
     {
         public string Id { get; set; }
         public string Question { get; set; }
-        public List<QuizQuestionChoice> Choices {get; set;} 
+        public List<QuestionChoice> Choices {get; set;} 
         public int CorrectAnswer { get; set; }
     }
 
