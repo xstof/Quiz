@@ -41,7 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attempt.cs" />
+    <Compile Include="AttemptAnswer.cs" />
     <Compile Include="AttemptQuestion.cs" />
+    <Compile Include="AttemptScore.cs" />
     <Compile Include="IAttemptRepository.cs" />
     <Compile Include="InMemoryAttemptRepository.cs" />
     <Compile Include="IQuizRepository.cs" />

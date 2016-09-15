@@ -1,4 +1,5 @@
-﻿using Quiz.Model;
+﻿using Quiz.API.WireModels;
+using Quiz.Model;
 using Swashbuckle.Swagger.Annotations;
 using System;
 using System.Collections.Generic;
@@ -34,12 +35,14 @@ namespace Quiz.API.Controllers
         [Route("api/quizes/{quizid}/attempts")]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.Created)]
-        public HttpResponseMessage Post(string quizid)
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        public HttpResponseMessage Post(string quizid, [FromBody] AttemptRequest attemptReq)
         {
             var quiz = quizRepo.FindQuiz(quizid);
             if (quiz == null) { return Request.CreateResponse(HttpStatusCode.NotFound); }
+            if (attemptReq == null || !attemptReq.IsValid()) { return Request.CreateResponse(HttpStatusCode.BadRequest); }
 
-            var attempt = quiz.CreateNewAttempt();
+            var attempt = quiz.CreateNewAttempt(attemptReq.Email);
             attemptsRepo.StoreAttempt(quizid, attempt);
 
             var response = Request.CreateResponse(HttpStatusCode.OK, attempt);
@@ -47,5 +50,20 @@ namespace Quiz.API.Controllers
             return response;
         }
 
+        [Route("api/quizes/{quizid}/attempts/{attemptid}/score")]
+        [SwaggerResponse(HttpStatusCode.NotFound)]
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        public HttpResponseMessage PostScore(string quizid, string attemptid, [FromBody] ScoreRequest scoreReq)
+        {
+            var quiz = quizRepo.FindQuiz(quizid);
+            if (quiz == null) { return Request.CreateResponse(HttpStatusCode.NotFound); }
+            var attempt = attemptsRepo.FindAttempt(quizid, attemptid);
+            if (attempt == null) { return Request.CreateResponse(HttpStatusCode.NotFound); }
+            if (scoreReq == null) { return Request.CreateResponse(HttpStatusCode.BadRequest); }
+
+            var score = attempt.Score(scoreReq.Answers, quizRepo);
+            return Request.CreateResponse(HttpStatusCode.OK, score);
+        }
     }
 }
