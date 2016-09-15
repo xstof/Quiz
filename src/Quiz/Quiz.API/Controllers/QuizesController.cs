@@ -43,7 +43,7 @@ namespace Quiz.API.Controllers
         }
 
         // POST api/quizes
-        [SwaggerOperation("Create")]
+        [SwaggerOperation("CreateQuiz")]
         [SwaggerResponse(HttpStatusCode.Created)]
         public HttpResponseMessage Post([FromBody]Model.Quiz quiz)
         {
