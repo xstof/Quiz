@@ -1,0 +1,15 @@
+<section class="quiz-app">
+  <header class="header">
+    <h1>Quiz Application</h1>
+  </header>
+  <section class="main">
+     <span>Choose Quiz:</span>
+     <select name="select">
+      <option *ngFor="let quiz of quizes" value="{{quiz.id}}">{{quiz.title}}</option>      
+     </select>
+     <input type="button" value="Start Quiz!"/> 
+  </section>
+  <!--<footer class="footer">
+    <span><strong>Powered by Angular 2.</strong></span>
+  </footer>-->
+</section>
