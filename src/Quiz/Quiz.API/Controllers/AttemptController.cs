@@ -63,6 +63,24 @@ namespace Quiz.API.Controllers
             if (scoreReq == null) { return Request.CreateResponse(HttpStatusCode.BadRequest); }
 
             var score = attempt.Score(scoreReq.Answers, quizRepo);
+            attemptsRepo.StoreAttemptScore(quizid, attemptid, score);
+
+            return Request.CreateResponse(HttpStatusCode.OK, score);
+        }
+
+        [Route("api/quizes/{quizid}/attempts/{attemptid}/score")]
+        [SwaggerResponse(HttpStatusCode.NotFound)]
+        [SwaggerResponse(HttpStatusCode.OK)]
+        public HttpResponseMessage GetScore(string quizid, string attemptid)
+        {
+            var quiz = quizRepo.FindQuiz(quizid);
+            if (quiz == null) { return Request.CreateResponse(HttpStatusCode.NotFound); }
+            var attempt = attemptsRepo.FindAttempt(quizid, attemptid);
+            if (attempt == null) { return Request.CreateResponse(HttpStatusCode.NotFound); }
+
+            var score = attemptsRepo.FindScore(quizid, attemptid);
+            if(score == null) { return Request.CreateResponse(HttpStatusCode.NotFound); }
+
             return Request.CreateResponse(HttpStatusCode.OK, score);
         }
     }
