@@ -3,26 +3,26 @@ import 'rxjs/Rx';
 
 import { Observable } from 'rxjs/Observable';
 import { Http, Response } from '@angular/http';
-import { Quiz } from './Quiz';
+import { Quiz } from './quiz';
+import { ConfigService } from './config-service.service';
 
 @Injectable()
 export class QuizProviderService {
 
-  private backendurl = 'http://demoquizapi.azurewebsites.net/api/Quizes';
+  private _availableQuizes: Observable<Quiz[]> = null;
 
-  constructor(private http: Http) { }
-
-  // OLD:
-  GetAvailableQuizes(): Quiz[] {
-    return [new Quiz(0, 'The great App Service Quiz'),
-            new Quiz(1, 'Some other random Quiz')];
+  constructor(private config: ConfigService, private http: Http) {
+    this._availableQuizes = this.getAvailableQuizesRx();
   }
-
-  GetAvailableQuizesRx(): Observable<Quiz[]> {
-    return this.http.get(this.backendurl)
+  private getAvailableQuizesRx(): Observable<Quiz[]> {
+    return this.http.get(this.config.backendUrlForAvailableQuizes)
                     .do(() => {console.log('observables in action'); })
                     .map(this.mapToQuiz)
                     .catch(this.handleError);
+  }
+
+  get AvailableQuizes(): Observable<Quiz[]> {
+    return this._availableQuizes;
   }
 
   private mapToQuiz(resp: Response): Quiz[] {

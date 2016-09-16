@@ -7,7 +7,7 @@
     <input type="text" placeholder="Enter your email."/><br/>
      <span>Choose Quiz:</span>
      <select name="select">
-      <option *ngFor="let quiz of quizes" value="{{quiz.id}}">{{quiz.title}}</option>      
+      <option *ngFor="let quiz of quizesrx | async" value="{{quiz.id}}">{{quiz.title}}</option>      
      </select>
      <input type="button" value="Start Quiz!"/>
   </section>

@@ -3,12 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { AppComponent } from './app.component';
 import { QuizAppComponent } from './quiz-app/quiz-app.component';
 
 @NgModule({
   declarations: [
-    AppComponent, QuizAppComponent
+    QuizAppComponent
   ],
   imports: [
     BrowserModule,
@@ -16,6 +15,6 @@ import { QuizAppComponent } from './quiz-app/quiz-app.component';
     HttpModule
   ],
   providers: [],
-  bootstrap: [/*AppComponent*/QuizAppComponent]
+  bootstrap: [QuizAppComponent]
 })
 export class AppModule { }
