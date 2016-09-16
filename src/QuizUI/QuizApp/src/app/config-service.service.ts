@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
-// import { Observable } from 'rxjs/Observable';
+import { Observable, BehaviorSubject } from 'rxjs/rx';
 
 @Injectable()
 export class ConfigService {
-  private _backendUrlForAvailableQuizes = 'http://demoquizapi.azurewebsites.net/api/Quizes';
+  private _urlForAvailableQuizesSubject = new BehaviorSubject('http://demoquizapi.azurewebsites.net/api/Quizes');
 
   constructor() { }
 
-  get backendUrlForAvailableQuizes(): string {
-    return this._backendUrlForAvailableQuizes;
+  get urlForAvailableQuizes(): Observable<string> {
+    return this._urlForAvailableQuizesSubject;
   }
 
-  set backendUrlForAvailableQuizes(url: string) {
-    this._backendUrlForAvailableQuizes = url;
+  setUrlForAvailableQuizes(url: string) {
+    this._urlForAvailableQuizesSubject.next(url);
   }
 }

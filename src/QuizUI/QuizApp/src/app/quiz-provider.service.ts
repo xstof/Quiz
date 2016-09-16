@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/Rx';
+//import 'rxjs/Rx';
 
 import { Observable } from 'rxjs/Observable';
 import { Http, Response } from '@angular/http';
@@ -15,16 +15,17 @@ export class QuizProviderService {
     this._availableQuizes = this.getAvailableQuizesRx();
   }
   private getAvailableQuizesRx(): Observable<Quiz[]> {
-    return this.http.get(this.config.backendUrlForAvailableQuizes)
-                    .do(() => {console.log('observables in action'); })
-                    .map(this.mapToQuiz)
-                    .catch(this.handleError);
+       return this.config.urlForAvailableQuizes
+               .do(url => console.log('new backend url: ' + url))
+               .flatMap(url => this.http.get(url))
+               .map(this.mapToQuiz)
+               .do(quizes => console.log('fetched new set of quizes'))
+               .catch(this.handleError);
   }
 
   get AvailableQuizes(): Observable<Quiz[]> {
     return this._availableQuizes;
   }
-
   private mapToQuiz(resp: Response): Quiz[] {
     console.log('mapping..');
     let body = resp.json();
@@ -33,6 +34,6 @@ export class QuizProviderService {
   }
 
   private handleError(error: any) {
-    return Observable.throw('failed fetching quizes');
+    return Observable.throw('failed fetching quizes - error: ' + error);
   }
 }

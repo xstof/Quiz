@@ -3,7 +3,6 @@ import { QuizProviderService } from '../quiz-provider.service';
 import { ConfigService } from '../config-service.service';
 import { Observable } from 'rxjs/Observable';
 import { Quiz } from '../quiz';
-import 'rxjs/Rx';
 
 @Component({
   selector: 'app-quiz-app',
