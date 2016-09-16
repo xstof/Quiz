@@ -6,13 +6,16 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { appRoutingProviders, routing } from './app.routing';
 
+import { ConfigService } from './config-service.service';
 import { QuizAppComponent } from './quiz-app/quiz-app.component';
 import { SettingsComponent } from './settings/settings.component';
+import { QuizProviderService } from './quiz-provider.service';
 
 @NgModule({
   declarations: [
     AppComponent,
-    QuizAppComponent, SettingsComponent
+    QuizAppComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -21,9 +24,10 @@ import { SettingsComponent } from './settings/settings.component';
     routing
   ],
   providers: [
-    appRoutingProviders
+    appRoutingProviders,
+    ConfigService,
+    QuizProviderService
   ],
   bootstrap: [AppComponent]
-  // bootstrap: [QuizAppComponent]
 })
 export class AppModule { }

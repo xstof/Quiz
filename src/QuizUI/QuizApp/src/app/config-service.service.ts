@@ -5,7 +5,7 @@ import { Observable, BehaviorSubject } from 'rxjs/rx';
 export class ConfigService {
   private _urlForAvailableQuizesSubject = new BehaviorSubject('http://demoquizapi.azurewebsites.net/api/Quizes');
 
-  constructor() { }
+  constructor() { console.log('created new config service'); }
 
   get urlForAvailableQuizes(): Observable<string> {
     return this._urlForAvailableQuizesSubject;
@@ -13,5 +13,6 @@ export class ConfigService {
 
   setUrlForAvailableQuizes(url: string) {
     this._urlForAvailableQuizesSubject.next(url);
+    console.log('updated url: ' + url);
   }
 }

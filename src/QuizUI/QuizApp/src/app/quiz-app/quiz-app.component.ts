@@ -1,14 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { QuizProviderService } from '../quiz-provider.service';
-import { ConfigService } from '../config-service.service';
 import { Observable } from 'rxjs/Observable';
 import { Quiz } from '../quiz';
 
 @Component({
   selector: 'app-quiz-app',
   templateUrl: './quiz-app.component.html',
-  styleUrls: ['./quiz-app.component.css'],
-  providers: [QuizProviderService, ConfigService]
+  styleUrls: ['./quiz-app.component.css']
 })
 export class QuizAppComponent implements OnInit {
   private _quizes: Quiz[] = null;
