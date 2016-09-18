@@ -16,7 +16,7 @@ export class QuizProviderService {
   }
   private getAvailableQuizesRx(): Observable<Quiz[]> {
        return this.config.urlForAvailableQuizes
-               .do(url => console.log('new backend url: ' + url))
+               .do(url => console.log('new backend url for fetching quizes: ' + url))
                .flatMap(url => this.http.get(url))
                .map(this.mapToQuiz)
                .do(quizes => console.log('fetched new set of quizes'))

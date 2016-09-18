@@ -13,7 +13,7 @@ export class SettingsComponent implements OnInit {
   constructor(private config: ConfigService) { }
 
   ngOnInit() {
-    this.config.urlForAvailableQuizes.subscribe(url => this._baseUrl = url);
+    this.config.baseUrl.subscribe(url => this._baseUrl = url);
   }
 
   get baseUrl(): string {
@@ -21,6 +21,6 @@ export class SettingsComponent implements OnInit {
   }
 
   set baseUrl(url: string) {
-    this.config.setUrlForAvailableQuizes(url);
+    this.config.setBaseUrl(url);
   }
 }
