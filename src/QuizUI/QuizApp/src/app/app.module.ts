@@ -10,12 +10,16 @@ import { ConfigService } from './config-service.service';
 import { QuizAppComponent } from './quiz-app/quiz-app.component';
 import { SettingsComponent } from './settings/settings.component';
 import { QuizProviderService } from './quiz-provider.service';
+import { AttemptComponent } from './attempt/attempt.component';
+import { AttemptNavigatorService } from './attempt-navigator.service';
+import { AttemptProviderService } from './attempt-provider.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     QuizAppComponent,
-    SettingsComponent
+    SettingsComponent,
+    AttemptComponent
   ],
   imports: [
     BrowserModule,
@@ -26,7 +30,9 @@ import { QuizProviderService } from './quiz-provider.service';
   providers: [
     appRoutingProviders,
     ConfigService,
-    QuizProviderService
+    QuizProviderService,
+    AttemptProviderService,
+    AttemptNavigatorService
   ],
   bootstrap: [AppComponent]
 })

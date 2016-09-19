@@ -4,7 +4,6 @@ import { Observable, BehaviorSubject } from 'rxjs/rx';
 @Injectable()
 export class ConfigService {
   private _baseServiceUrlSubject = new BehaviorSubject('http://demoquizapi.azurewebsites.net/api');
-  private _urlForAvailableQuizesSubject = new BehaviorSubject('http://demoquizapi.azurewebsites.net/api/Quizes');
 
   constructor() {
     console.log('created new config service');
@@ -23,9 +22,7 @@ export class ConfigService {
     return this._baseServiceUrlSubject.map(u => u + '/Quizes');
   }
 
-  // TODO: remove
-  setUrlForAvailableQuizes(url: string) {
-    this._urlForAvailableQuizesSubject.next(url);
-    console.log('updated url: ' + url);
+  get urlForQuizAttempts(): Observable<string> {
+    return this._baseServiceUrlSubject.map(u => u + '/Attempts');
   }
 }
