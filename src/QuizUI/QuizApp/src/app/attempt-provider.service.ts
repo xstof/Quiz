@@ -9,17 +9,20 @@ import { Attempt } from './attempt';
 
 @Injectable()
 export class AttemptProviderService {
-   private _attemptStartRequests: BehaviorSubject<string> = new BehaviorSubject(null);
+   private _attemptStartRequests: BehaviorSubject<attemptRequest> = new BehaviorSubject(null);
 
    constructor(private config: ConfigService, private http: Http) { }
 
-   StartAttempt(email: string) {
-     this._attemptStartRequests.next(email);
+   StartAttempt(email: string, quizid: string) {
+     this._attemptStartRequests.next( {'email': email, 'quizid': quizid} );
    }
 
    get CurrentAttempt(): Observable<Attempt> {
-     return Observable.combineLatest(this.config.urlForQuizAttempts, this._attemptStartRequests)
-               .flatMap(e => this.http.post(e[0], {'Email': e[1]}))
+     return Observable.combineLatest(
+       this.config.urlForQuizAttempts,
+       this._attemptStartRequests.filter(e => (e !== null)))
+               .flatMap(e => this.http.post(e[0](e[1].quizid), {'Email': e[1].email}))
+               .do(() => console.log('created new attempt'))
                .map(this.mapToAttempt);
    }
 
@@ -27,6 +30,12 @@ export class AttemptProviderService {
     console.log('mapping..');
     let body = resp.json();
     let attempt = <Attempt> body;
+    console.log('attempt body that came back: ' + attempt);
     return attempt;
    }
+}
+
+interface attemptRequest {
+  email: string;
+  quizid: string;
 }

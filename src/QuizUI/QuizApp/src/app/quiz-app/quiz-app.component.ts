@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { QuizProviderService } from '../quiz-provider.service';
 import { Observable } from 'rxjs/Observable';
 import { Quiz } from '../quiz';
+import { Router } from '@angular/router';
+import { AttemptProviderService } from '../attempt-provider.service';
 
 @Component({
   selector: 'app-quiz-app',
@@ -10,8 +12,11 @@ import { Quiz } from '../quiz';
 })
 export class QuizAppComponent implements OnInit {
   private _quizes: Quiz[] = null;
+  private _email: string = null;
 
-  constructor(private quizProvider: QuizProviderService) { }
+  constructor(private router: Router,
+              private quizProvider: QuizProviderService,
+              private attemptProvider: AttemptProviderService) { }
 
   ngOnInit() {}
 
@@ -21,5 +26,19 @@ export class QuizAppComponent implements OnInit {
 
   get quizesrx(): Observable<Quiz[]> {
     return this.quizProvider.AvailableQuizes;
+  }
+
+  get email(): string {
+    return this._email;
+  }
+
+  set email(email: string) {
+    console.log('new email set: ' + email);
+    this._email = email;
+  }
+
+  startAttempt(email: string, quizid: string) {
+    this.attemptProvider.StartAttempt(email, quizid);
+    this.router.navigate(['/attempt']);
   }
 }

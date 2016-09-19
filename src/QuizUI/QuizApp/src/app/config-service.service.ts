@@ -22,7 +22,10 @@ export class ConfigService {
     return this._baseServiceUrlSubject.map(u => u + '/Quizes');
   }
 
-  get urlForQuizAttempts(): Observable<string> {
-    return this._baseServiceUrlSubject.map(u => u + '/Attempts');
+  get urlForQuizAttempts(): Observable<(quizid: string) => string> {
+      return this._baseServiceUrlSubject.map(u =>
+        function(quizid: string) {
+          return u + `/Quizes/${quizid}/Attempts`;
+        } );
   }
 }
