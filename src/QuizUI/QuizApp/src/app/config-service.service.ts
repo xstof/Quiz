@@ -3,6 +3,7 @@ import { Observable, BehaviorSubject } from 'rxjs/rx';
 
 @Injectable()
 export class ConfigService {
+  // private _baseServiceUrlSubject = new BehaviorSubject(window.location.host + '/api');
   private _baseServiceUrlSubject = new BehaviorSubject('http://demoquizapi.azurewebsites.net/api');
 
   constructor() {
@@ -19,20 +20,20 @@ export class ConfigService {
   }
 
   get urlForAvailableQuizes(): Observable<string> {
-    return this._baseServiceUrlSubject.map(u => u + '/Quizes');
+    return this._baseServiceUrlSubject.map(u => u + '/quizzes');
   }
 
   get urlForQuizAttempts(): Observable<(quizid: string) => string> {
       return this._baseServiceUrlSubject.map(u =>
         function(quizid: string) {
-          return u + `/Quizes/${quizid}/Attempts`;
+          return u + `/quizzes/${quizid}/attempts`;
         } );
   }
 
   get urlForScoring(): Observable<(quizid: string, attemptid: string) => string> {
     return this._baseServiceUrlSubject.map(u =>
       function(quizid: string, attemptid: string) {
-        return u + `/Quizes/${quizid}/Attempts/${attemptid}/Score`;
+        return u + `/quizzes/${quizid}/attempts/${attemptid}/score`;
       }
     );
   }
