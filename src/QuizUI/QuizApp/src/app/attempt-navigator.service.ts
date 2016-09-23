@@ -15,6 +15,7 @@ export class AttemptNavigatorService {
   constructor(private attemptProvider: AttemptProviderService) {
     attemptProvider.CurrentAttempt.subscribe(
       a => {
+        this._currentQuestionIndex = -1;
         this._attempt = a; this.MoveToNextQuestion();
         this._lastQuestionIdInAttempt = a.Questions[a.Questions.length - 1].Id;
       },

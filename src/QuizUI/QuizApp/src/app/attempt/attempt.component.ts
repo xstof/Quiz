@@ -36,7 +36,7 @@ export class AttemptComponent implements OnInit {
         this.currentAnswer = null;
       }
     });
-    this.canMoveToNextQuestion = this.attemptNav.CanMoveToNextQuestion.do(v => console.log('can move to next: '+ v));
+    this.canMoveToNextQuestion = this.attemptNav.CanMoveToNextQuestion.do(v => console.log('can move to next: ' + v));
   }
 
   moveToNextQuestion() {
@@ -48,6 +48,10 @@ export class AttemptComponent implements OnInit {
   }
 
   moveToPreviousQuestion() {
+    console.log('recording answer for current question: ' + this.currentAnswer);
+    this.answerColl.AddAnwer(this._currentQuestionIdForAnswer , this.currentAnswer);
+
+    console.log('moving to previous question using attempt navigator');
     this.attemptNav.MoveToPreviousQuestion();
   }
 
