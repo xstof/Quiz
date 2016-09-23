@@ -6,10 +6,9 @@
     <span>What is your email address please?</span>
     <input type="text" placeholder="Enter your email." [(ngModel)]="email"/><br/>
      <span>Choose Quiz:</span>
-     <select name="select">
+     <select name="select" [(ngModel)]="selectedQuizId">
       <option *ngFor="let quiz of quizesrx | async" value="{{quiz.id}}">{{quiz.title}}</option>      
      </select>
-     <!-- TODO: make sure to inject quizid dynamically, remove hardcoding here: --> 
-     <input type="button" value="Start Quiz!" (click)="startAttempt(email, 0)"/>
+     <input type="button" value="Start Quiz!" (click)="startAttempt(email)"/>
   </section> 
 </section>

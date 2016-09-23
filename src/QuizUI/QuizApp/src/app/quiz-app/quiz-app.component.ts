@@ -14,6 +14,8 @@ export class QuizAppComponent implements OnInit {
   private _quizes: Quiz[] = null;
   private _email: string = null;
 
+  selectedQuizId: string = null;
+
   constructor(private router: Router,
               private quizProvider: QuizProviderService,
               private attemptProvider: AttemptProviderService) { }
@@ -37,8 +39,8 @@ export class QuizAppComponent implements OnInit {
     this._email = email;
   }
 
-  startAttempt(email: string, quizid: string) {
-    this.attemptProvider.StartAttempt(email, quizid);
+  startAttempt(email: string) {
+    this.attemptProvider.StartAttempt(email, this.selectedQuizId);
     this.router.navigate(['/attempt']);
   }
 }
