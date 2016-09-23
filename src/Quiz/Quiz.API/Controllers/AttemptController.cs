@@ -20,10 +20,11 @@ namespace Quiz.API.Controllers
             this.quizRepo = quizRepo;
             this.attemptsRepo = attemptsRepo;
         }
-
-        [Route("api/quizes/{quizid}/attempts/{attemptid}", Name = "getattempt")]
+      
+        [SwaggerOperation("GetAttempt")]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.OK)]
+        [Route("api/quizes/{quizid}/attempts/{attemptid}", Name = "getattempt")]
         public HttpResponseMessage Get(string quizid, string attemptid)
         {
             var attempt = attemptsRepo.FindAttempt(quizid, attemptid);
@@ -31,11 +32,12 @@ namespace Quiz.API.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK, attempt);
         }
-
-        [Route("api/quizes/{quizid}/attempts")]
+        
+        [SwaggerOperation("StartAttempt")]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.Created)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [Route("api/quizes/{quizid}/attempts")]
         public HttpResponseMessage Post(string quizid, [FromBody] AttemptRequest attemptReq)
         {
             var quiz = quizRepo.FindQuiz(quizid);
@@ -50,10 +52,11 @@ namespace Quiz.API.Controllers
             return response;
         }
 
-        [Route("api/quizes/{quizid}/attempts/{attemptid}/score")]
+        [SwaggerOperation("CalculateAttemptScore")]   
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.OK)]
+        [Route("api/quizes/{quizid}/attempts/{attemptid}/score")]
         public HttpResponseMessage PostScore(string quizid, string attemptid, [FromBody] ScoreRequest scoreReq)
         {
             var quiz = quizRepo.FindQuiz(quizid);
@@ -68,9 +71,10 @@ namespace Quiz.API.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, score);
         }
 
-        [Route("api/quizes/{quizid}/attempts/{attemptid}/score")]
+        [SwaggerOperation("GetAttemptScore")]        
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.OK)]
+        [Route("api/quizes/{quizid}/attempts/{attemptid}/score")]
         public HttpResponseMessage GetScore(string quizid, string attemptid)
         {
             var quiz = quizRepo.FindQuiz(quizid);

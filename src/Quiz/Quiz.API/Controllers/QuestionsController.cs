@@ -38,7 +38,7 @@ namespace Quiz.API.Controllers
         }
 
         // GET api/quizes/{quizid}/questions/{questionid}
-        [SwaggerOperation("GetQuizQuestion")]
+        [SwaggerOperation("GetQuizQuestionById")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [Route("api/quizes/{quizid}/questions/{questionid}", Name = "getsinglequestion")]
