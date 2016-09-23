@@ -8,4 +8,5 @@
 
 <br/>
 <input type="button" value="Previous" (click)="moveToPreviousQuestion()"/>
-<input type="button" value="Next" (click)="moveToNextQuestion()"/>
+<input type="button" value="Next" (click)="moveToNextQuestion()" *ngIf="(canMoveToNextQuestion | async)" />
+<input type="button" value="Score Quiz" (click)="moveToPreviousQuestion()" *ngIf="(canMoveToNextQuestion | async) === false" />

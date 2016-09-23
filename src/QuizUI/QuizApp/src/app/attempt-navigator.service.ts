@@ -10,10 +10,14 @@ export class AttemptNavigatorService {
   private _attempt: Attempt = null;
   private _currentQuestionIndex: number = -1;
   private _currentQuestion: Subject<Question> = new Subject<Question>();
+  private _lastQuestionIdInAttempt: string = null;
 
   constructor(private attemptProvider: AttemptProviderService) {
     attemptProvider.CurrentAttempt.subscribe(
-      a => {this._attempt = a; this.MoveToNextQuestion(); },
+      a => {
+        this._attempt = a; this.MoveToNextQuestion();
+        this._lastQuestionIdInAttempt = a.Questions[a.Questions.length - 1].Id;
+      },
       err => console.log('error received from attemptprovider: ' + err),
       () => console.log('attemptprovider currentattempt observable finished') );
     console.log('subscribed to attemptprovider service');
@@ -38,6 +42,10 @@ export class AttemptNavigatorService {
       this._currentQuestionIndex--;
       this._currentQuestion.next(this._attempt.Questions[this._currentQuestionIndex]);
     }
+  }
+
+  get CanMoveToNextQuestion(): Observable<boolean> {
+    return this.CurrentQuestion.map(q => q.Id !== this._lastQuestionIdInAttempt);
   }
 
 }

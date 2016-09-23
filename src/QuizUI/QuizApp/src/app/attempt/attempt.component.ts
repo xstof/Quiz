@@ -17,6 +17,8 @@ export class AttemptComponent implements OnInit {
   currentQuestionId: Observable<string> = null;
   currentQuestionChoices: Observable<string[]> = null;
   currentAnswer: number = null;
+  canMoveToNextQuestion: Observable<boolean> = null;
+
   private _currentQuestionIdForAnswer: string = null;
 
   constructor(private attemptNav: AttemptNavigatorService,
@@ -34,6 +36,7 @@ export class AttemptComponent implements OnInit {
         this.currentAnswer = null;
       }
     });
+    this.canMoveToNextQuestion = this.attemptNav.CanMoveToNextQuestion.do(v => console.log('can move to next: '+ v));
   }
 
   moveToNextQuestion() {
