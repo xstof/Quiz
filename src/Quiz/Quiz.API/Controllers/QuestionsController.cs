@@ -21,7 +21,7 @@ namespace Quiz.API.Controllers
         [SwaggerOperation("GetAllQuizQuestions")]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.OK)]
-        [Route("api/quizes/{quizid}/questions")]
+        [Route("api/quizzes/{quizid}/questions")]
         public HttpResponseMessage Get(string quizid)
         {
             var quiz = repo.FindQuiz(quizid);
@@ -41,7 +41,7 @@ namespace Quiz.API.Controllers
         [SwaggerOperation("GetQuizQuestionById")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
-        [Route("api/quizes/{quizid}/questions/{questionid}", Name = "getsinglequestion")]
+        [Route("api/quizzes/{quizid}/questions/{questionid}", Name = "getsinglequestion")]
         public HttpResponseMessage Get(string quizid, string questionid)
         {
             var quiz = repo.FindQuiz(quizid);
@@ -63,7 +63,7 @@ namespace Quiz.API.Controllers
         [SwaggerOperation("AddQuizQuestion")]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.Created)]
-        [Route("api/quizes/{quizid}/questions")]
+        [Route("api/quizzes/{quizid}/questions")]
         public HttpResponseMessage Post(string quizid, [FromBody] Model.QuizQuestion question)
         {
             var quiz = repo.FindQuiz(quizid);
@@ -84,7 +84,7 @@ namespace Quiz.API.Controllers
         [SwaggerOperation("DeleteQuizQuestion")]
         [SwaggerResponse(HttpStatusCode.OK)]
         [SwaggerResponse(HttpStatusCode.NotFound)]
-        [Route("api/quizes/{quizid}/questions/{questionid}")]
+        [Route("api/quizzes/{quizid}/questions/{questionid}")]
         public HttpResponseMessage Delete(string quizid, string questionid)
         {
             var quiz = repo.FindQuiz(quizid);
