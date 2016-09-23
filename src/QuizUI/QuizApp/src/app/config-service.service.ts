@@ -28,4 +28,12 @@ export class ConfigService {
           return u + `/Quizes/${quizid}/Attempts`;
         } );
   }
+
+  get urlForScoring(): Observable<(quizid: string, attemptid: string) => string> {
+    return this._baseServiceUrlSubject.map(u =>
+      function(quizid: string, attemptid: string) {
+        return u + `/Quizes/${quizid}/Attempts/${attemptid}/Score`;
+      }
+    );
+  }
 }
