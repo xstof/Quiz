@@ -50,11 +50,13 @@ namespace Quiz.Model
                 }
             }
 
+            decimal percentageScore = ((decimal)nrCorrectAnswers / questionCount) * 100;
+
             return new AttemptScore()
             {
                 NumberOfQuestions = questionCount,
                 NumberOfCorrectAnswers = nrCorrectAnswers,
-                ScoreInPercentage = (int)((nrCorrectAnswers / questionCount) * 100)
+                ScoreInPercentage = (int)percentageScore
             };
         }
      }
