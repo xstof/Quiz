@@ -1,4 +1,11 @@
 <p>
-  Question: {{currentQuestion.Question | async}}
+  <b>Question: {{currentQuestion | async}}</b> <br/>
 </p>
+
+  <select [(ngModel)]="currentAnswer">
+    <option *ngFor="let o of currentQuestionChoices | async, let i = index" [value]="i">{{o}}</option>
+  </select>
+
 <br/>
+<input type="button" value="Previous" (click)="moveToPreviousQuestion()"/>
+<input type="button" value="Next" (click)="moveToNextQuestion()"/>

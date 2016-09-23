@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
 import { AttemptNavigatorService } from '../attempt-navigator.service';
-import { Question } from '../attempt';
+import { Question, Choice } from '../attempt';
 
 @Component({
   selector: 'app-attempt',
@@ -11,16 +11,24 @@ import { Question } from '../attempt';
 })
 export class AttemptComponent implements OnInit {
 
+  currentQuestion: Observable<string> = null;
+  currentQuestionId: Observable<string> = null;
+  currentQuestionChoices: Observable<string[]> = null;
+  currentAnswer: number;
+  answers: number[];
+
   constructor(private attemptNav: AttemptNavigatorService) { }
 
   ngOnInit() {
-  }
-
-  get currentQuestion(): Observable<Question> {
-    return this.attemptNav.CurrentQuestion;
+    this.currentQuestion = this.attemptNav.CurrentQuestion.map(q => q.Question);
+    this.currentQuestionId = this.attemptNav.CurrentQuestion.map(q => q.Id);
+    this.currentQuestionChoices = this.attemptNav.CurrentQuestion.map(q => q.Choices.map(c => c.Choice));
   }
 
   moveToNextQuestion() {
+    console.log('recording answer for current question: ' + this.currentAnswer);
+    // TODO
+    console.log('moving to next question using attempt navigator');
     this.attemptNav.MoveToNextQuestion();
   }
 

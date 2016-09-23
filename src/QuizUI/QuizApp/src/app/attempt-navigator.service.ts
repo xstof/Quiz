@@ -25,8 +25,10 @@ export class AttemptNavigatorService {
   }
 
   MoveToNextQuestion() {
+    if (this._attempt == null) { console.log('no current attempt to move within'); }
     if (this._currentQuestionIndex < (this._attempt.Questions.length - 1)) {
       this._currentQuestionIndex++;
+      console.log('pushing new question from attempt nav service: ' + this._attempt.Questions[this._currentQuestionIndex].Question);
       this._currentQuestion.next(this._attempt.Questions[this._currentQuestionIndex]);
     }
   }
