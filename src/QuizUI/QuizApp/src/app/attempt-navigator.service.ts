@@ -8,7 +8,7 @@ import { Attempt, Question, Choice } from './attempt';
 @Injectable()
 export class AttemptNavigatorService {
   private _attempt: Attempt = null;
-  private _currentQuestionIndex: number = 0;
+  private _currentQuestionIndex: number = -1;
   private _currentQuestion: Subject<Question> = new Subject<Question>();
 
   constructor(private attemptProvider: AttemptProviderService) {
