@@ -9,17 +9,17 @@ using System.Web.Http;
 
 namespace Quiz.API.Controllers
 {
-    public class QuizesController : ApiController
+    public class QuizzesController : ApiController
     {
         private readonly IQuizRepository repo;
 
-        public QuizesController(IQuizRepository repo)
+        public QuizzesController(IQuizRepository repo)
         {
             this.repo = repo;
         }
 
         // GET api/quizes
-        [SwaggerOperation("GetAllQuizes")]
+        [SwaggerOperation("GetAllQuizzes")]
         public IEnumerable<Model.Quiz> Get()
         {
             return repo.AllQuizes();
@@ -50,7 +50,7 @@ namespace Quiz.API.Controllers
             var newQuiz = repo.CreateNewQuiz(quiz);
 
             var response = Request.CreateResponse(HttpStatusCode.Created, newQuiz);
-            response.Headers.Location = new Uri(Request.RequestUri, Url.Route("DefaultApi", new {controller="quizes", id=quiz.Id }));
+            response.Headers.Location = new Uri(Request.RequestUri, Url.Route("DefaultApi", new {controller="quizzes", id=quiz.Id }));
             return response;
         }
 

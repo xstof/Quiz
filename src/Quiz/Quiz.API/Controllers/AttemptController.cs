@@ -24,7 +24,7 @@ namespace Quiz.API.Controllers
         [SwaggerOperation("GetAttempt")]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.OK)]
-        [Route("api/quizes/{quizid}/attempts/{attemptid}", Name = "getattempt")]
+        [Route("api/quizzes/{quizid}/attempts/{attemptid}", Name = "getattempt")]
         public HttpResponseMessage Get(string quizid, string attemptid)
         {
             var attempt = attemptsRepo.FindAttempt(quizid, attemptid);
@@ -37,7 +37,7 @@ namespace Quiz.API.Controllers
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.Created)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
-        [Route("api/quizes/{quizid}/attempts")]
+        [Route("api/quizzes/{quizid}/attempts")]
         public HttpResponseMessage Post(string quizid, [FromBody] AttemptRequest attemptReq)
         {
             var quiz = quizRepo.FindQuiz(quizid);
@@ -56,7 +56,7 @@ namespace Quiz.API.Controllers
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.OK)]
-        [Route("api/quizes/{quizid}/attempts/{attemptid}/score")]
+        [Route("api/quizzes/{quizid}/attempts/{attemptid}/score")]
         public HttpResponseMessage PostScore(string quizid, string attemptid, [FromBody] ScoreRequest scoreReq)
         {
             var quiz = quizRepo.FindQuiz(quizid);
@@ -74,7 +74,7 @@ namespace Quiz.API.Controllers
         [SwaggerOperation("GetAttemptScore")]        
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [SwaggerResponse(HttpStatusCode.OK)]
-        [Route("api/quizes/{quizid}/attempts/{attemptid}/score")]
+        [Route("api/quizzes/{quizid}/attempts/{attemptid}/score")]
         public HttpResponseMessage GetScore(string quizid, string attemptid)
         {
             var quiz = quizRepo.FindQuiz(quizid);

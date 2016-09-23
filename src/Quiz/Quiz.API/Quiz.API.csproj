@@ -148,7 +148,7 @@
     <Compile Include="App_Start\AutofacConfig.cs" />
     <Compile Include="Controllers\AttemptController.cs" />
     <Compile Include="Controllers\QuestionsController.cs" />
-    <Compile Include="Controllers\QuizesController.cs" />
+    <Compile Include="Controllers\QuizzesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
