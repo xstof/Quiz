@@ -13,13 +13,16 @@ import { QuizProviderService } from './quiz-provider.service';
 import { AttemptComponent } from './attempt/attempt.component';
 import { AttemptNavigatorService } from './attempt-navigator.service';
 import { AttemptProviderService } from './attempt-provider.service';
+import { ScoreComponent } from './score/score.component';
+import { ScoringService } from './scoring-service.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     QuizAppComponent,
     SettingsComponent,
-    AttemptComponent
+    AttemptComponent,
+    ScoreComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +35,8 @@ import { AttemptProviderService } from './attempt-provider.service';
     ConfigService,
     QuizProviderService,
     AttemptProviderService,
-    AttemptNavigatorService
+    AttemptNavigatorService, 
+    ScoringService
   ],
   bootstrap: [AppComponent]
 })

@@ -9,7 +9,7 @@ import { AnswerCollection } from './answercollection';
 import { Score } from './score';
 
 @Injectable()
-export class ScoringServiceService {
+export class ScoringService {
   private _scoringRequests: BehaviorSubject<ScoringRequest> = new BehaviorSubject(null);
 
   constructor(private http: Http, private config: ConfigService) { }

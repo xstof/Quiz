@@ -12,12 +12,17 @@ export class AttemptNavigatorService {
   private _currentQuestion: Subject<Question> = new Subject<Question>();
   private _lastQuestionIdInAttempt: string = null;
 
+  quizId: string = null;
+  attemptId: string = null;
+
   constructor(private attemptProvider: AttemptProviderService) {
     attemptProvider.CurrentAttempt.subscribe(
       a => {
         this._currentQuestionIndex = -1;
         this._attempt = a; this.MoveToNextQuestion();
         this._lastQuestionIdInAttempt = a.Questions[a.Questions.length - 1].Id;
+        this.quizId = a.QuizId;
+        this.attemptId = a.Id;
       },
       err => console.log('error received from attemptprovider: ' + err),
       () => console.log('attemptprovider currentattempt observable finished') );

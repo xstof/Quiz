@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Router } from '@angular/router';
 
 import { AttemptNavigatorService } from '../attempt-navigator.service';
 import { AnswerCollectionService } from '../answer-collection.service';
+import { ScoringService } from '../scoring-service.service';
 import { Question, Choice } from '../attempt';
 
 @Component({
@@ -20,9 +22,13 @@ export class AttemptComponent implements OnInit {
   canMoveToNextQuestion: Observable<boolean> = null;
 
   private _currentQuestionIdForAnswer: string = null;
+  private _quizId: string = null;
+  private _attemptId: string = null;
 
-  constructor(private attemptNav: AttemptNavigatorService,
-              private answerColl: AnswerCollectionService) { }
+  constructor(private router: Router,
+              private attemptNav: AttemptNavigatorService,
+              private answerColl: AnswerCollectionService,
+              private scoringSvc: ScoringService) { }
 
   ngOnInit() {
     this.currentQuestion = this.attemptNav.CurrentQuestion.map(q => q.Question);
@@ -30,6 +36,9 @@ export class AttemptComponent implements OnInit {
     this.currentQuestionChoices = this.attemptNav.CurrentQuestion.map(q => q.Choices.map(c => c.Choice));
     this.attemptNav.CurrentQuestion.subscribe(q => {
       this._currentQuestionIdForAnswer = q.Id;
+      this._quizId = this.attemptNav.quizId;
+      this._attemptId = this.attemptNav.attemptId;
+
       if (this.answerColl.FindAnswerIndexForQuestion(q.Id) !== null) {
         this.currentAnswer = this.answerColl.FindAnswerIndexForQuestion(q.Id);
       } else {
@@ -53,6 +62,11 @@ export class AttemptComponent implements OnInit {
 
     console.log('moving to previous question using attempt navigator');
     this.attemptNav.MoveToPreviousQuestion();
+  }
+
+  score() {
+    this.scoringSvc.ScoreQuiz(this._quizId, this._attemptId, this.answerColl.CollectAnswers());
+    this.router.navigate(['/score']);
   }
 
 }

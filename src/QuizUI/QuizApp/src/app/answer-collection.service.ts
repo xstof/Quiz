@@ -32,4 +32,8 @@ export class AnswerCollectionService {
     }
   }
 
+  CollectAnswers(): AnswerCollection {
+    return this._answercoll;
+  }
+
 }
