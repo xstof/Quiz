@@ -12,3 +12,8 @@ To build the UI SPA, which is made by means of the Angular 2 CLI, install the CL
 
     npm install -g angular-cli
 
+### SPA UI needs to be compiled locally
+For now... 
+
+    ng build
+
