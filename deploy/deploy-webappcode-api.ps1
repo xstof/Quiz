@@ -34,7 +34,6 @@ Nuget.exe restore "$parentDirectoryPath\src\Quiz"
 
 # Select Subscription:
 Get-AzureRmSubscription -SubscriptionName "$SubscriptionName" | Select-AzureRmSubscription
-Get-AzureRmWebApp -Name $WebAppName
 echo "Selected Azure Subscription"
 
 # Fetch publishing profile for web app:
