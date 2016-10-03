@@ -3,7 +3,8 @@
     <h1>Quiz Application - Settings</h1>
   </header>
   <section class="main">
-    <span>URL to fetch available quizes: </span>
+    <span>Base URL for API: </span>
     <input type="text" [(ngModel)]="baseUrl"/><br/>
+    <input type="button" value="Change Settings" (click)="setBaseUrl()"/>
   </section>
 </section>
