@@ -53,9 +53,9 @@ echo "password: $password"
 $computername = $publishsettingsxml.publishData.publishProfile[0].publishUrl
 echo "computer name: $computername"
 
-# Deploy the pet-clinic web app
-& "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe" `
--verb:sync `
--source:contentPath="$sourceDirToBuild\dist" `
--dest:contentPath="$websiteName,computerName=https://$computername/msdeploy.axd?site=$websiteName,userName=$username,password=$password,authType=Basic"
+# Deploy the web app ui
+$msdeploy = "C:\Program Files (x86)\IIS\Microsoft Web Deploy V3\msdeploy.exe"
 
+$msdeploycommand = $("`"{0}`" -verb:sync -source:contentPath=`"{1}\dist`" -dest:contentPath=`"{2}`",computerName=https://{3}/msdeploy.axd?site={4},userName={5},password={6},authType=Basic" -f $msdeploy, $sourceDirToBuild, $websiteName, $computername, $websiteName, $username, $password)
+
+cmd.exe /C "`"$msdeploycommand`"";
