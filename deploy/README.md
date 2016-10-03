@@ -7,3 +7,8 @@ There's a dependency on the Nuget command line environment in the build scripts.
 
     choco install nuget.commandline
 
+### Angular CLI must be installed globally
+To build the UI SPA, which is made by means of the Angular 2 CLI, install the CLI globally:
+
+    npm install -g angular-cli
+

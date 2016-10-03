@@ -53,4 +53,8 @@ New-AzureRmResourceGroupDeployment -Verbose -Force `
   -RGName "$RGName" `
   -WebAppName $QuizAPIWebAppName
 
-# TODO: Deploy code onto UI Web App:
+# Deploy code onto UI Web App:
+. "./deploy-webappcode-ui.ps1" `
+  -SubscriptionName "$SubscriptionName" `
+  -RGName "$RGName" `
+  -WebAppName $QuizUIWebAppName
