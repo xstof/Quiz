@@ -11,7 +11,7 @@ export class ConfigService {
   }
 
   get baseUrl(): Observable<string> {
-    return this._baseServiceUrlSubject;
+    return this._baseServiceUrlSubject.distinct().share();
   }
 
   setBaseUrl(url: string) {
@@ -20,18 +20,18 @@ export class ConfigService {
   }
 
   get urlForAvailableQuizes(): Observable<string> {
-    return this._baseServiceUrlSubject.map(u => u + '/quizzes');
+    return this._baseServiceUrlSubject.distinct().map(u => u + '/quizzes');
   }
 
   get urlForQuizAttempts(): Observable<(quizid: string) => string> {
-      return this._baseServiceUrlSubject.map(u =>
+      return this._baseServiceUrlSubject.distinct().map(u =>
         function(quizid: string) {
           return u + `/quizzes/${quizid}/attempts`;
         } );
   }
 
   get urlForScoring(): Observable<(quizid: string, attemptid: string) => string> {
-    return this._baseServiceUrlSubject.map(u =>
+    return this._baseServiceUrlSubject.distinct().map(u =>
       function(quizid: string, attemptid: string) {
         return u + `/quizzes/${quizid}/attempts/${attemptid}/score`;
       }
