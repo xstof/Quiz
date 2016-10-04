@@ -65,6 +65,34 @@ namespace Quiz.Model
                  },
                 CorrectAnswer = 0
             });
+
+            repo.AddQuestionToQuiz(quiz.Id, new QuizQuestion()
+            {
+                Id = "3",
+                Question = "What is local cache?",
+                Choices = new List<QuestionChoice>()
+                 {
+                     new QuestionChoice() { Choice = "A feature that improves perf by allowing the use of the local disk in App Service." },
+                     new QuestionChoice() { Choice = "Redis as a service in App Service." },
+                     new QuestionChoice() { Choice = "An in-memory cache provider for App Service." },
+                     new QuestionChoice() { Choice = "A way to track session state." }
+                 },
+                CorrectAnswer = 0
+            });
+
+            repo.AddQuestionToQuiz(quiz.Id, new QuizQuestion()
+            {
+                Id = "4",
+                Question = "What is Easy Auth?",
+                Choices = new List<QuestionChoice>()
+                 {
+                     new QuestionChoice() { Choice = "An easy way to configure authorization for web apps." },
+                     new QuestionChoice() { Choice = "An easy way to configure authorization for api apps." },
+                     new QuestionChoice() { Choice = "An easy way to configure authorization for both web and api apps." },
+                     new QuestionChoice() { Choice = "Another name for OAuth in App Service." }
+                 },
+                CorrectAnswer = 0
+            });
         }
 
         public QuizQuestion AddQuestionToQuiz(string quizId, QuizQuestion question)
