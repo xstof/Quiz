@@ -19,6 +19,10 @@ namespace Quiz.API
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            // Initialize WebHook support:
+            config.InitializeCustomWebHooks();
+            config.InitializeCustomWebHooksApis();
         }
     }
 }
