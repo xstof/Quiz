@@ -73,8 +73,8 @@ namespace Quiz.API.Controllers
             attemptsRepo.StoreAttemptScore(quizid, attemptid, score);
 
             // Raise webhook when score was posted and recorded:
-            //await this.NotifyAllAsync("attemptscored", new { quizid = quizid, attemptid = attemptid });
-            await this._manager.NotifyAllAsync("attemptscored", new { QuizId = quizid, AttemptId = attemptid });
+            await this.NotifyAllAsync("attemptscored", new { quizid = quizid, attemptid = attemptid });
+            //await this._manager.NotifyAllAsync("attemptscored", new { QuizId = quizid, AttemptId = attemptid });
 
 
             return Request.CreateResponse(HttpStatusCode.OK, score);

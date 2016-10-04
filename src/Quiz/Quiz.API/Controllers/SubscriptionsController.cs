@@ -22,16 +22,14 @@ namespace Quiz.API.Controllers
         {
             string username = getUserName();
 
+            await _store.DeleteAllWebHooksAsync(username);
             var hooks = await _store.QueryWebHooksAsync(username, new string[] { "*" }, (wh, s) => wh.WebHookUri == webhook.WebHookUri);
 
             // Remove all existing webhooks (demo purposes)
-            if (hooks.Count() != 0)
-            {
-                foreach(var hk in hooks)
-                {
-                    hooks.Remove(hk);
-                }   
-            }
+            //if (hooks.Count() != 0)
+            //{
+            //    hooks.Clear();
+            //}
 
             // Add new webhook
             webhook.Filters.Add("*");
