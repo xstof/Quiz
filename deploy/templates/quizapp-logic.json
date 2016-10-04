@@ -1,0 +1,69 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {   
+    "LogicAppName": {
+      "type": "string",
+      "minLength": 1
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+            "comments": "",
+            "type": "Microsoft.Logic/workflows",
+            "name": "[parameters('LogicAppName')]",
+            "apiVersion": "2016-06-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "properties": {
+                "state": "Disabled",
+                "definition": {
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "triggers": {
+                        "HTTP_Webhook": {
+                            "type": "HttpWebhook",
+                            "inputs": {
+                                "subscribe": {
+                                    "body": {
+                                        "Id": "0",
+                                        "Secret": "nosecrets",
+                                        "WebHookUri": "@{listCallbackUrl()}"
+                                    },
+                                    "method": "POST",
+                                    "uri": "[concat('http://', reference(concat('Microsoft.Resources/deployments/', 'all'), '2015-11-01').outputs.quizAPIWebAppName.value, '.azurewebsites.net/api/Subscriptions')]"
+                                },
+                                "unsubscribe": {
+                                    "body": "@listCallbackUrl()",
+                                    "method": "DELETE",
+                                    "uri": "[concat('http://', reference(concat('Microsoft.Resources/deployments/', 'all'), '2015-11-01').outputs.quizAPIWebAppName.value, '.azurewebsites.net/api/Subscriptions')]"
+                                }
+                            }
+                        }
+                    },
+                    "actions": {
+                        "GetAttemptScore": {
+                            "runAfter": {},
+                            "metadata": {
+                                "apiDefinitionUrl": "[concat('https://', reference(concat('Microsoft.Resources/deployments/', 'all'), '2015-11-01').outputs.quizAPIWebAppName.value, '.azurewebsites.net/swagger/docs/v1')]",
+                                "swaggerSource": "website"
+                            },
+                            "type": "Http",
+                            "inputs": {
+                                "method": "get",
+                                "uri": "[concat('https://', reference(concat('Microsoft.Resources/deployments/', 'all'), '2015-11-01').outputs.quizAPIWebAppName.value, '.azurewebsites.net/api/quizzes/@{encodeURIComponent(triggerBody().Notifications[0].quizid)}/attempts/@{encodeURIComponent(triggerBody().Notifications[0].attemptid)}/score')]"
+                            }
+                        }
+                    },
+                    "outputs": {}
+                }
+                
+            },
+            "resources": []
+           
+        }
+  ],
+  "outputs": {}
+}

@@ -286,6 +286,10 @@
     "appServicePlanName": {
       "type": "string",
       "value": "[parameters('AppServicePlanName')]"
+    },
+    "quizAPIWebAppName" : {
+      "type": "string",
+      "value": "[parameters('QuizAPIWebAppName')]"
     }
   }
 }
