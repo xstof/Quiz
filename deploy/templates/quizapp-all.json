@@ -1,7 +1,7 @@
 {
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
-  "parameters": {   
+  "parameters": {
     "AppServicePlanName": {
       "type": "string",
       "minLength": 1
@@ -68,7 +68,7 @@
       "type": "Microsoft.Web/serverfarms",
       "location": "[resourceGroup().location]",
       "apiVersion": "2014-06-01",
-      "dependsOn": [ ],
+      "dependsOn": [],
       "tags": {
         "displayName": "AppServicePlan"
       },
@@ -85,7 +85,7 @@
       "location": "[resourceGroup().location]",
       "apiVersion": "2015-08-01",
       "dependsOn": [
-          "[concat('Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]"
+        "[concat('Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]"
       ],
       "tags": {
         "displayName": "WebApp"
@@ -117,7 +117,7 @@
           "properties": {
             "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('AzureWebJobStorageNameForAPI'),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('AzureWebJobStorageNameForAPI')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
             "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('AzureWebJobStorageDashboardNameForAPI'),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('AzureWebJobStorageDashboardNameForAPI')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
-            "WEBSITE_LOAD_CERTIFICATES": "*"            
+            "WEBSITE_LOAD_CERTIFICATES": "*"
           }
         },
         {
@@ -138,16 +138,46 @@
               "url": "[concat('https://', parameters('QuizAPIWebAppName'), '.azurewebsites.net/swagger/docs/v1')]"
             }
           }
+        },
+        {
+          "name": "staging",
+          "type": "slots",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2015-08-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('QuizAPIWebAppName'))]"
+          ],
+          "properties": {},
+          "resources": [
+            {
+              "type": "config",
+              "apiVersion": "2015-08-01",
+              "name": "web",
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('QuizAPIWebAppName'), 'staging')]"
+              ],
+              "properties": {
+                "cors": {
+                  "allowedOrigins": [
+                    "*"
+                  ]
+                },
+                "apiDefinition": {
+                  "url": "[concat('https://', parameters('QuizAPIWebAppName'), '-staging.azurewebsites.net/swagger/docs/v1')]"
+                }
+              }
+            }
+          ]
         }
       ]
     },
-     {
+    {
       "name": "[parameters('QuizUIWebAppName')]",
       "type": "Microsoft.Web/sites",
       "location": "[resourceGroup().location]",
       "apiVersion": "2015-08-01",
       "dependsOn": [
-          "[concat('Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]"
+        "[concat('Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]"
       ],
       "tags": {
         "displayName": "WebApp"
@@ -179,7 +209,7 @@
           "properties": {
             "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('AzureWebJobStorageNameForUI'),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('AzureWebJobStorageNameForUI')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
             "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('AzureWebJobStorageDashboardNameForUI'),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('AzureWebJobStorageDashboardNameForUI')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
-            "WEBSITE_LOAD_CERTIFICATES": "*"            
+            "WEBSITE_LOAD_CERTIFICATES": "*"
           }
         },
         {
@@ -200,7 +230,7 @@
       "type": "Microsoft.Storage/storageAccounts",
       "location": "[resourceGroup().location]",
       "apiVersion": "2015-06-15",
-      "dependsOn": [ ],
+      "dependsOn": [],
       "tags": {
         "displayName": "AzureWebJobStorageDashboard"
       },
@@ -213,7 +243,7 @@
       "type": "Microsoft.Storage/storageAccounts",
       "location": "[resourceGroup().location]",
       "apiVersion": "2015-06-15",
-      "dependsOn": [ ],
+      "dependsOn": [],
       "tags": {
         "displayName": "AzureWebJobStorage"
       },
@@ -226,7 +256,7 @@
       "type": "Microsoft.Storage/storageAccounts",
       "location": "[resourceGroup().location]",
       "apiVersion": "2015-06-15",
-      "dependsOn": [ ],
+      "dependsOn": [],
       "tags": {
         "displayName": "AzureWebJobStorageDashboard"
       },
@@ -239,7 +269,7 @@
       "type": "Microsoft.Storage/storageAccounts",
       "location": "[resourceGroup().location]",
       "apiVersion": "2015-06-15",
-      "dependsOn": [ ],
+      "dependsOn": [],
       "tags": {
         "displayName": "AzureWebJobStorage"
       },
