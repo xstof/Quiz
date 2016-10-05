@@ -82,7 +82,8 @@ namespace Quiz.API.Controllers
 
         [SwaggerOperation("GetAttemptScore")]        
         [SwaggerResponse(HttpStatusCode.NotFound)]
-        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.OK, Type = typeof(AttemptScore))]
+
         [Route("api/quizzes/{quizid}/attempts/{attemptid}/score")]
         public HttpResponseMessage GetScore(string quizid, string attemptid)
         {
