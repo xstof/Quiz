@@ -263,8 +263,8 @@ __pycache__/
 *.pyc
 
 # compiled output
-/src/Quiz/QuizUI/QuizApp/dist
-/src/Quiz/QuizUI/QuizApp/tmp
+/src/QuizUI/QuizApp/dist
+/src/QuizUI/QuizApp/tmp
 
 # dependencies
 /src/QuizUI/QuizApp/node_modules
