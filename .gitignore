@@ -261,3 +261,11 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+
+# compiled output
+/src/Quiz/QuizUI/QuizApp/dist
+/src/Quiz/QuizUI/QuizApp/tmp
+
+# dependencies
+/src/Quiz/QuizUI/QuizApp/node_modules
+/src/Quiz/QuizUI/QuizApp/bower_components
