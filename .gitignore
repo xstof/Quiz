@@ -267,5 +267,5 @@ __pycache__/
 /src/Quiz/QuizUI/QuizApp/tmp
 
 # dependencies
-/src/Quiz/QuizUI/QuizApp/node_modules
-/src/Quiz/QuizUI/QuizApp/bower_components
+/src/QuizUI/QuizApp/node_modules
+/src/QuizUI/QuizApp/bower_components
