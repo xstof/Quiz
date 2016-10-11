@@ -19,7 +19,9 @@ export class ConfigService {
                                       .do(u => console.log('using api base url: ' + u))
                                       .map(u => u.json().apibaseurl);
     this._compoundBaseUrlObservable = this._baseServiceUrlObservable
-                                          .concat(this._manualBaseServiceUrlOverrideSubject);
+                                          .concat(this._manualBaseServiceUrlOverrideSubject)
+                                          .publishReplay(1)
+                                          .refCount();
   }
 
   get baseUrl(): Observable<string> {
