@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/rx';
 import 'rxjs/rx';
@@ -8,11 +8,13 @@ import { ConfigService } from './config-service.service';
 import { AnswerCollection } from './answercollection';
 import { Score } from './score';
 
+import { AuthenticatedHttpClient } from './authenticatedHttpClient';
+
 @Injectable()
 export class ScoringService {
   private _scoringRequests: BehaviorSubject<ScoringRequest> = new BehaviorSubject(null);
 
-  constructor(private http: Http, private config: ConfigService) { }
+  constructor(private http: AuthenticatedHttpClient, private config: ConfigService) { }
 
   ScoreQuiz(quizId: string, attemptId: string, answers: AnswerCollection) {
      this._scoringRequests.next( {'quizid': quizId, 'attemptid': attemptId, 'answers': answers} );
