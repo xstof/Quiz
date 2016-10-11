@@ -22,7 +22,10 @@ Param(
   [string]$QuizAPIWebAppName,
 
   [Parameter(Mandatory=$True)]
-  [string]$QuizUIWebAppName
+  [string]$QuizUIWebAppName,
+
+  [Parameter(Mandatory=$True)]
+  [string]$LogicAppName
 )
 
 Select-AzureRmSubscription -SubscriptionName $SubscriptionName
@@ -58,3 +61,9 @@ New-AzureRmResourceGroupDeployment -Verbose -Force `
   -SubscriptionName "$SubscriptionName" `
   -RGName "$RGName" `
   -WebAppName $QuizUIWebAppName
+
+  # Deploy Logic App:
+. "./deploy-logic.ps1" `
+  -SubscriptionName "$SubscriptionName" `
+  -RGName "$RGName" `
+  -LogicAppName $LogicAppName

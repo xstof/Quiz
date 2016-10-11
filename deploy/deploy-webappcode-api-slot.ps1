@@ -13,8 +13,8 @@ Param(
   [Parameter(Mandatory=$True)]
   [string]$WebAppName,
 
-  [Parameter(Mandatory=$True)]
-  [string]$SlotName
+  [Parameter(Mandatory=$False)]
+  [string]$SlotName='staging'
 )
 
 # Determine current working directory:

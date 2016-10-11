@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
+import { Http } from '@angular/http';
 import { Observable, BehaviorSubject } from 'rxjs/rx';
 
 @Injectable()
 export class ConfigService {
   // private _baseServiceUrlSubject = new BehaviorSubject(window.location.host + '/api');
-  private _baseServiceUrlSubject = new BehaviorSubject('http://demoquizapi.azurewebsites.net/api');
+  // private _baseServiceUrlSubject = new BehaviorSubject('http://demoquizapi.azurewebsites.net/api');
+  private _baseServiceUrlSubject = null;
 
-  constructor() {
+  constructor(http: Http) {
     console.log('created new config service');
+
+    this._baseServiceUrlSubject = http.get('/apibaseurl')
+                                      .do(u => console.log('using api base url: ' + u))
+                                      .map(u => u.json().apibaseurl);
   }
 
   get baseUrl(): Observable<string> {
