@@ -179,7 +179,8 @@
           "properties": {
             "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('AzureWebJobStorageNameForUI'),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('AzureWebJobStorageNameForUI')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
             "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('AzureWebJobStorageDashboardNameForUI'),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('AzureWebJobStorageDashboardNameForUI')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
-            "WEBSITE_LOAD_CERTIFICATES": "*"            
+            "WEBSITE_LOAD_CERTIFICATES": "*",
+            "APIBASEURL": "[concat('http://', parameters('QuizAPIWebAppName'), '.azurewebsites.net/api')]"            
           }
         },
         {
@@ -256,6 +257,10 @@
     "appServicePlanName": {
       "type": "string",
       "value": "[parameters('AppServicePlanName')]"
-    }
+    },
+    "quizAPIWebAppName" : {
+       "type": "string",
+       "value": "[parameters('QuizAPIWebAppName')]"
+     }
   }
 }
