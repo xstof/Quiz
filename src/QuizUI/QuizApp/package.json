@@ -8,7 +8,10 @@
     "lint": "tslint \"src/**/*.ts\"",
     "test": "ng test",
     "pree2e": "webdriver-manager update",
-    "e2e": "protractor"
+    "e2e": "protractor",
+    "build": "npm run ngbuild && npm run copynodetodist",
+    "ngbuild": "ng build",
+    "copynodetodist": "node ./scripts/copynodetodist.js"
   },
   "private": true,
   "dependencies": {
@@ -20,7 +23,11 @@
     "@angular/platform-browser": "2.0.0",
     "@angular/platform-browser-dynamic": "2.0.0",
     "@angular/router": "3.0.0",
+    "body-parser": "^1.15.2",
+    "cookie-parser": "^1.4.3",
+    "copyfiles": "^1.0.0",
     "core-js": "^2.4.1",
+    "express": "^4.14.0",
     "rxjs": "5.0.0-beta.12",
     "ts-helpers": "^1.1.1",
     "zone.js": "^0.6.23"
