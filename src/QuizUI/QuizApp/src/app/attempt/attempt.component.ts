@@ -69,6 +69,7 @@ export class AttemptComponent implements OnInit {
     this.answerColl.AddAnwer(this._currentQuestionIdForAnswer , this.currentAnswer);
 
     this.scoringSvc.ScoreQuiz(this._quizId, this._attemptId, this.answerColl.CollectAnswers());
+    console.log('submitted answers for scoring to scoring service');
     this.router.navigate(['/score']);
   }
 
