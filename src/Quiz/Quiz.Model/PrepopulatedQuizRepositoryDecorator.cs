@@ -91,7 +91,7 @@ namespace Quiz.Model
                      new QuestionChoice() { Choice = "An easy way to configure authorization for both web and api apps." },
                      new QuestionChoice() { Choice = "Another name for OAuth in App Service." }
                  },
-                CorrectAnswer = 0
+                CorrectAnswer = 2
             });
         }
 
