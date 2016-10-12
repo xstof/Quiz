@@ -53,5 +53,15 @@
                 }               
             ]
         }
-    ]
+    ],
+    "outputs": {
+    "functionAppName": {
+      "type": "string",
+      "value": "[parameters('FunctionAppName')]"
+    },
+    "functionId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+    }
+  }
 }

@@ -1,15 +1,33 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {   
-    "LogicAppName": {
-      "type": "string",
-      "minLength": 1
-    }
-  },
-  "variables": {},
-  "resources": [
-    {
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "LogicAppName": {
+            "type": "string",
+            "minLength": 1
+        },
+        "MailDestinationAddress": {
+            "type": "string",
+            "minLength": 1
+        }
+    },
+    "variables": {
+        "o365ConnectionName": "[concat('O365ConnFor', parameters('LogicAppNAme'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/connections",
+            "name": "[concat('O365ConnFor', parameters('LogicAppNAme'))]",
+            "apiVersion": "2016-06-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "displayName": "o365 connection",
+                "api": {
+                    "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/office365')]"
+                }
+            }
+        },
+        {
             "comments": "",
             "type": "Microsoft.Logic/workflows",
             "name": "[parameters('LogicAppName')]",
@@ -21,7 +39,12 @@
                 "definition": {
                     "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
                     "contentVersion": "1.0.0.0",
-                    "parameters": {},
+                    "parameters": {
+                        "$connections": {
+                            "defaultValue": {},
+                            "type": "Object"
+                        }
+                    },
                     "triggers": {
                         "HTTP_Webhook": {
                             "type": "HttpWebhook",
@@ -44,6 +67,57 @@
                         }
                     },
                     "actions": {
+                        "Condition": {
+                            "actions": {
+                                "CreateCertificate": {
+                                    "inputs": {
+                                        "body": {
+                                            "AttemptId": "@triggerBody()['Notifications'][0]['attemptid']",
+                                            "ScoreInPercentage": "@body('GetAttemptScore')?['ScoreInPercentage']"
+                                        },
+                                        "function": {
+                                            "id": "[concat(reference(concat('Microsoft.Resources/deployments/', 'function'), '2015-11-01').outputs.functionId.value, '/functions/CreateCertificate')]"
+                                        }
+                                    },
+                                    "runAfter": {},
+                                    "type": "Function"
+                                },
+                                "Send_an_email": {
+                                    "inputs": {
+                                        "body": {
+                                            "Body": "You scored @{body('GetAttemptScore')?['ScoreInPercentage']} %.\nPlease download your certificate <a href=\"@{body('CreateCertificate')?['certificateUrl']}\">here</a>",
+                                            "Importance": "Low",
+                                            "IsHtml": true,
+                                            "Subject": "Congratulations on your score",
+                                            "To": "[parameters('MailDestinationAddress')]"
+                                        },
+                                        "host": {
+                                            "api": {
+                                                "runtimeUrl": "https://logic-apis-westeurope.azure-apim.net/apim/office365"
+                                            },
+                                            "connection": {
+                                                "name": "[concat('@parameters(''$connections'')[''office365''][''connectionId'']')]"
+                                            }
+                                        },
+                                        "method": "post",
+                                        "path": "/Mail"
+                                    },
+                                    "runAfter": {
+                                        "CreateCertificate": [
+                                            "Succeeded"
+                                        ]
+                                    },
+                                    "type": "ApiConnection"
+                                }
+                            },
+                            "expression": "@greater(body('GetAttemptScore')?['ScoreInPercentage'], 50)",
+                            "runAfter": {
+                                "GetAttemptScore": [
+                                    "Succeeded"
+                                ]
+                            },
+                            "type": "If"
+                        },
                         "GetAttemptScore": {
                             "runAfter": {},
                             "metadata": {
@@ -58,12 +132,21 @@
                         }
                     },
                     "outputs": {}
+                },
+                "parameters": {
+                    "$connections": {
+                        "value": {
+                            "office365": {                                
+                                "connectionId": "[concat(subscription().id, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/connections/', variables('o365ConnectionName'))]",
+                                "connectionName": "[variables('o365ConnectionName')]",
+                                "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', resourceGroup().location, '/managedApis/office365') ]"
+                            }
+                        }
+                    }
                 }
-                
             },
             "resources": []
-           
         }
-  ],
-  "outputs": {}
+    ],
+    "outputs": {}
 }

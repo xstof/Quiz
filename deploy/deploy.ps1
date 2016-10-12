@@ -25,7 +25,13 @@ Param(
   [string]$QuizUIWebAppName,
 
   [Parameter(Mandatory=$True)]
-  [string]$LogicAppName
+  [string]$FunctionAppName,
+
+  [Parameter(Mandatory=$True)]
+  [string]$LogicAppName, 
+
+  [Parameter(Mandatory=$True)]
+  [string]$MailDestinationAddress
 )
 
 Select-AzureRmSubscription -SubscriptionName $SubscriptionName
@@ -62,8 +68,15 @@ New-AzureRmResourceGroupDeployment -Verbose -Force `
   -RGName "$RGName" `
   -WebAppName $QuizUIWebAppName
 
-  # Deploy Logic App:
+# Deploy Function:
+. "./deploy-function.ps1" `
+  -SubscriptionName "$SubscriptionName" `
+  -RGName "$RGName" `
+  -FunctionAppName $FunctionAppName
+
+# Deploy Logic App:
 . "./deploy-logic.ps1" `
   -SubscriptionName "$SubscriptionName" `
   -RGName "$RGName" `
-  -LogicAppName $LogicAppName
+  -LogicAppName $LogicAppName `
+  -MailDestinationAddress $MailDestinationAddress

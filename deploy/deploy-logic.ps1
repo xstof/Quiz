@@ -12,7 +12,10 @@ Param(
   [string]$RGName,
 
   [Parameter(Mandatory=$True)]
-  [string]$LogicAppName
+  [string]$LogicAppName,
+
+  [Parameter(Mandatory=$True)]
+  [string]$MailDestinationAddress
 )
 
 Select-AzureRmSubscription -SubscriptionName $SubscriptionName
@@ -24,4 +27,5 @@ New-AzureRmResourceGroupDeployment -Verbose -Force `
    -Name "logic" `
    -ResourceGroupName $RGName `
    -TemplateFile "$scriptDir/templates/quizapp-logic.json" `
-   -LogicAppName $LogicAppName
+   -LogicAppName $LogicAppName `
+   -MailDestinationAddress $MailDestinationAddress
