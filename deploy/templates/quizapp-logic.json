@@ -33,7 +33,9 @@
             "name": "[parameters('LogicAppName')]",
             "apiVersion": "2016-06-01",
             "location": "[resourceGroup().location]",
-            "dependsOn": [],
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/connections', variables('o365ConnectionName'))]"
+            ],
             "properties": {
                 "state": "Disabled",
                 "definition": {
