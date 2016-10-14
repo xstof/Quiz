@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/rx';
 import 'rxjs/rx';
 
 import { ConfigService } from './config-service.service';
 import { Attempt } from './attempt';
+import { AuthenticatedHttpClient } from './authenticatedHttpClient';
 
 @Injectable()
 export class AttemptProviderService {
    private _attemptStartRequests: BehaviorSubject<attemptRequest> = new BehaviorSubject(null);
 
-   constructor(private config: ConfigService, private http: Http) { }
+   constructor(private config: ConfigService, private http: AuthenticatedHttpClient) { }
 
    StartAttempt(email: string, quizid: string) {
      this._attemptStartRequests.next( {'email': email, 'quizid': quizid} );

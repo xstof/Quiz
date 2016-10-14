@@ -5,6 +5,8 @@
   <section class="main">
     <span>Base URL for API: </span>
     <input type="text" [(ngModel)]="baseUrl"/><br/>
-    <input type="button" value="Change Settings" (click)="setBaseUrl()"/>
+     <span>API Management Key: </span>
+    <input type="text" [(ngModel)]="apimKey"/><br/>
+    <input type="button" value="Change Settings" (click)="saveSettings()"/>
   </section>
 </section>

@@ -8,15 +8,26 @@ import { ConfigService } from '../config-service.service';
   styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit {
-  private baseUrl: string = null;
+  baseUrl: string = null;
+  apimKey: string = '';
 
   constructor(private config: ConfigService) { }
 
   ngOnInit() {
     this.config.baseUrl.subscribe(url => this.baseUrl = url);
+    this.config.apimKey.subscribe(key => this.apimKey = key);
   }
 
   setBaseUrl() {
     this.config.setBaseUrl(this.baseUrl);
+  }
+
+  setApimKey() {
+    this.config.setAPIMKey(this.apimKey);
+  }
+
+  saveSettings() {
+    this.setBaseUrl();
+    this.setApimKey();
   }
 }
