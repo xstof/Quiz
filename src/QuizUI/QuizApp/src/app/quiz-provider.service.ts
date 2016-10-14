@@ -2,16 +2,19 @@ import { Injectable } from '@angular/core';
 //import 'rxjs/Rx';
 
 import { Observable } from 'rxjs/Observable';
-import { Http, Response } from '@angular/http';
+import { Response } from '@angular/http';
 import { Quiz } from './quiz';
 import { ConfigService } from './config-service.service';
+
+import { AuthenticatedHttpClient } from './authenticatedHttpClient';
 
 @Injectable()
 export class QuizProviderService {
 
   private _availableQuizes: Observable<Quiz[]> = null;
 
-  constructor(private config: ConfigService, private http: Http) {
+  constructor(private config: ConfigService, private http: AuthenticatedHttpClient) {
+    console.log('quizproviderservice constructor called');
     this._availableQuizes = this.getAvailableQuizesRx();
   }
   private getAvailableQuizesRx(): Observable<Quiz[]> {

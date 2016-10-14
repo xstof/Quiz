@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { ScoringService } from '../scoring-service.service';
 import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/rx';
+import { BehaviorSubject, Subscription } from 'rxjs/rx';
 import { Score } from '../score';
 
 @Component({
@@ -10,17 +10,22 @@ import { Score } from '../score';
   templateUrl: './score.component.html',
   styleUrls: ['./score.component.css']
 })
-export class ScoreComponent implements OnInit {
+export class ScoreComponent implements OnInit, OnDestroy {
+  private _scoreSubscription: Subscription = null;
   score: number = null;
 
   constructor(private scoringsvc: ScoringService) {
-    this.scoringsvc.Score.subscribe(s => {
+
+  }
+
+  ngOnInit() {
+    this._scoreSubscription = this.scoringsvc.Score.subscribe(s => {
       this.score = s.ScoreInPercentage;
     });
   }
 
-  ngOnInit() {
-
+  ngOnDestroy() {
+    this._scoreSubscription.unsubscribe();
   }
 
 }

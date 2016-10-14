@@ -5,8 +5,6 @@ import { Http } from '@angular/http';
 
 @Injectable()
 export class ConfigService {
-  // private _baseServiceUrlSubject = new BehaviorSubject(window.location.host + '/api');
-  // private _baseServiceUrlSubject = new BehaviorSubject('http://demoquizapi.azurewebsites.net/api');
   private _baseServiceUrlObservable: Observable<string> = null;
   private _manualBaseServiceUrlOverrideSubject = new ReplaySubject<string>(1);
   private _compoundBaseUrlObservable: Observable<string> = null;
@@ -45,11 +43,11 @@ export class ConfigService {
   }
 
   get urlForScoring(): Observable<(quizid: string, attemptid: string) => string> {
-    return this._compoundBaseUrlObservable.distinct().map(u =>
-      function(quizid: string, attemptid: string) {
+    return this._compoundBaseUrlObservable.distinct().map(u => {
+      return function(quizid: string, attemptid: string) {
         return u + `/quizzes/${quizid}/attempts/${attemptid}/score`;
-      }
-    );
+      };
+    });
   }
 
   setAPIMKey(key: string) {
