@@ -15,6 +15,8 @@ import { AttemptNavigatorService } from './attempt-navigator.service';
 import { AttemptProviderService } from './attempt-provider.service';
 import { ScoreComponent } from './score/score.component';
 import { ScoringService } from './scoring-service.service';
+import { Http } from '@angular/http';
+import { AuthenticatedHttpClient } from './authenticatedHttpClient';
 
 @NgModule({
   declarations: [
@@ -35,8 +37,15 @@ import { ScoringService } from './scoring-service.service';
     ConfigService,
     QuizProviderService,
     AttemptProviderService,
-    AttemptNavigatorService, 
-    ScoringService
+    AttemptNavigatorService,
+    ScoringService,
+    {
+      provide: AuthenticatedHttpClient,
+      useFactory: (http: Http, config: ConfigService) => {
+        return new AuthenticatedHttpClient(http, config);
+      },
+      deps: [Http, ConfigService]
+    }
   ],
   bootstrap: [AppComponent]
 })
