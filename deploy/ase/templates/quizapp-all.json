@@ -1,0 +1,298 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "AppServicePlanName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "numberOfWorkersFromWorkerPool": {
+      "type": "int",
+      "defaultValue": 1,
+      "metadata": {
+        "description": "Defines the number of workers from the worker pool that will be used by the app service plan."
+      }
+    },
+    "existingAseLocation": {
+      "type": "string",
+      "metadata": {
+        "description": "Set this to the same location as the App Service Environment"
+      }
+    },
+    "QuizAPIWebAppName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "QuizUIWebAppName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "AzureWebJobStorageDashboardType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_ZRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ]
+    },
+    "AzureWebJobStorageType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_ZRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Premium_LRS"
+      ]
+    }
+  },
+  "variables": {
+    "AzureWebJobStorageDashboardNameForUI": "[toLower(concat('JobStorDUI', uniqueString(resourceGroup().id)))]",
+    "AzureWebJobStorageDashboardNameForAPI": "[toLower(concat('JobStorDAPI', uniqueString(resourceGroup().id)))]",
+    "AzureWebJobStorageNameForUI": "[toLower(concat('JobStorUI', uniqueString(resourceGroup().id)))]",
+    "AzureWebJobStorageNameForAPI": "[toLower(concat('JobStorAPI', uniqueString(resourceGroup().id)))]"
+  },
+  "resources": [
+    {
+      "name": "[parameters('AppServicePlanName')]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[parameters('existingAseLocation')]",
+      "apiVersion": "2015-08-01",
+      "dependsOn": [
+      
+      ],
+      "tags": {
+        "displayName": "AppServicePlan"
+      },
+      "properties": {
+        "name": "[parameters('appServicePlanName')]",
+        "hostingEnvironment": "[reference(concat('Microsoft.Resources/deployments/', 'ase'), '2015-11-01').outputs.AseName.value]",
+        "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', reference(concat('Microsoft.Resources/deployments/', 'ase'), '2015-11-01').outputs.AseName.value)]"
+      },
+      "sku": {
+        "name": "[concat('P','1')]",
+        "tier": "Premium",
+        "size": "[concat('P','1')]",
+        "family": "P",
+        "capacity": "[parameters('numberOfWorkersFromWorkerPool')]"
+      }
+    },
+    {
+      "name": "[parameters('QuizAPIWebAppName')]",
+      "type": "Microsoft.Web/sites",
+      "location": "[parameters('existingAseLocation')]",
+      "apiVersion": "2015-08-01",
+      "dependsOn": [
+        "[concat('Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]"
+      ],
+      "tags": {
+        "displayName": "WebApp"
+      },
+      "properties": {
+        "name": "[parameters('QuizAPIWebAppName')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]",
+        "hostingEnvironment": "[reference(concat('Microsoft.Resources/deployments/', 'ase'), '2015-11-01').outputs.AseName.value]",
+        "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', reference(concat('Microsoft.Resources/deployments/', 'ase'), '2015-11-01').outputs.AseName.value)]",
+        "siteConfig": {
+          "AlwaysOn": true,
+          "connectionStrings": [
+            {
+              "name": "MS_AzureStoreConnectionString",
+              "connectionString": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('AzureWebJobStorageNameForAPI'),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('AzureWebJobStorageNameForAPI')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+            }
+          ]
+        }
+      },
+      "resources": [
+        {
+          "name": "appsettings",
+          "type": "config",
+          "apiVersion": "2015-08-01",
+          "dependsOn": [
+            "[concat('Microsoft.Web/sites/', parameters('QuizAPIWebAppName'))]"
+          ],
+          "tags": {
+            "displayName": "WebAppSettings"
+          },
+          "properties": {
+            "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('AzureWebJobStorageNameForAPI'),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('AzureWebJobStorageNameForAPI')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+            "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('AzureWebJobStorageDashboardNameForAPI'),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('AzureWebJobStorageDashboardNameForAPI')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+            "WEBSITE_LOAD_CERTIFICATES": "*"
+          }
+        },
+        {
+          "apiVersion": "2015-08-01",
+          "name": "web",
+          "type": "config",
+          "dependsOn": [
+            "[concat('Microsoft.Web/sites/', parameters('QuizAPIWebAppName'))]"
+          ],
+          "properties": {
+            "alwaysOn": true,
+            "cors": {
+              "allowedOrigins": [
+                "*"
+              ]
+            },
+            "apiDefinition": {
+              "url": "[concat('https://', parameters('QuizAPIWebAppName'), reference(concat('Microsoft.Resources/deployments/', 'ase'), '2015-11-01').outputs.AseName.value, 'p.azurewebsites.net/swagger/docs/v1')]"
+            }
+          }
+        },
+        {
+          "name": "staging",
+          "type": "slots",
+          "location": "[parameters('existingAseLocation')]",
+          "apiVersion": "2015-08-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('QuizAPIWebAppName'))]"
+          ],
+          "properties": {},
+          "resources": [
+            {
+              "type": "config",
+              "apiVersion": "2015-08-01",
+              "name": "web",
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/sites/slots', parameters('QuizAPIWebAppName'), 'staging')]"
+              ],
+              "properties": {
+                "cors": {
+                  "allowedOrigins": [
+                    "*"
+                  ]
+                },
+                "apiDefinition": {
+                  "url": "[concat('https://', parameters('QuizAPIWebAppName'), '-staging', reference(concat('Microsoft.Resources/deployments/', 'ase'), '2015-11-01').outputs.AseName.value, 'p.azurewebsites.net/swagger/docs/v1')]"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "[parameters('QuizUIWebAppName')]",
+      "type": "Microsoft.Web/sites",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-08-01",
+      "dependsOn": [
+        "[concat('Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]"
+      ],
+      "tags": {
+        "displayName": "WebApp"
+      },
+      "properties": {
+        "name": "[parameters('QuizUIWebAppName')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]",
+        "hostingEnvironment": "[reference(concat('Microsoft.Resources/deployments/', 'ase'), '2015-11-01').outputs.AseName.value]",
+        "hostingEnvironmentId": "[resourceId('Microsoft.Web/hostingEnvironments', reference(concat('Microsoft.Resources/deployments/', 'ase'), '2015-11-01').outputs.AseName.value)]",
+        "siteConfig": {
+          "AlwaysOn": true,
+          "connectionStrings": [
+            {
+              "name": "MS_AzureStoreConnectionString",
+              "connectionString": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('AzureWebJobStorageNameForUI'),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('AzureWebJobStorageNameForUI')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]"
+            }
+          ]
+        }
+      },
+      "resources": [
+        {
+          "name": "appsettings",
+          "type": "config",
+          "apiVersion": "2015-08-01",
+          "dependsOn": [
+            "[concat('Microsoft.Web/sites/', parameters('QuizUIWebAppName'))]"
+          ],
+          "tags": {
+            "displayName": "WebAppSettings"
+          },
+          "properties": {
+            "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('AzureWebJobStorageNameForUI'),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('AzureWebJobStorageNameForUI')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+            "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('AzureWebJobStorageDashboardNameForUI'),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('AzureWebJobStorageDashboardNameForUI')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
+            "WEBSITE_LOAD_CERTIFICATES": "*",
+            "APIBASEURL": "[concat('http://', parameters('QuizAPIWebAppName'), '.azurewebsites.net/api')]"
+          }
+        },
+        {
+          "apiVersion": "2015-08-01",
+          "name": "web",
+          "type": "config",
+          "dependsOn": [
+            "[concat('Microsoft.Web/sites/', parameters('QuizUIWebAppName'))]"
+          ],
+          "properties": {
+            "alwaysOn": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "[variables('AzureWebJobStorageDashboardNameForUI')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "AzureWebJobStorageDashboard"
+      },
+      "properties": {
+        "accountType": "[parameters('AzureWebJobStorageDashboardType')]"
+      }
+    },
+    {
+      "name": "[variables('AzureWebJobStorageNameForUI')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "AzureWebJobStorage"
+      },
+      "properties": {
+        "accountType": "[parameters('AzureWebJobStorageType')]"
+      }
+    },
+    {
+      "name": "[variables('AzureWebJobStorageDashboardNameForAPI')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "AzureWebJobStorageDashboard"
+      },
+      "properties": {
+        "accountType": "[parameters('AzureWebJobStorageDashboardType')]"
+      }
+    },
+    {
+      "name": "[variables('AzureWebJobStorageNameForAPI')]",
+      "type": "Microsoft.Storage/storageAccounts",
+      "location": "[resourceGroup().location]",
+      "apiVersion": "2015-06-15",
+      "dependsOn": [],
+      "tags": {
+        "displayName": "AzureWebJobStorage"
+      },
+      "properties": {
+        "accountType": "[parameters('AzureWebJobStorageType')]"
+      }
+    }
+  ],
+  "outputs": {
+    "appServicePlanName": {
+      "type": "string",
+      "value": "[parameters('AppServicePlanName')]"
+    },
+    "quizAPIWebAppName": {
+      "type": "string",
+      "value": "[parameters('QuizAPIWebAppName')]"
+    }
+  }
+}
