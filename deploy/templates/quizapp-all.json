@@ -23,7 +23,7 @@
         "1",
         "2"
       ],
-      "defaultValue": "2"
+      "defaultValue": "0"
     },
     "QuizAPIWebAppName": {
       "type": "string",
