@@ -9,6 +9,7 @@ export class ConfigService {
   private _manualBaseServiceUrlOverrideSubject = new ReplaySubject<string>(1);
   private _compoundBaseUrlObservable: Observable<string> = null;
   private _apimKeySubject = new BehaviorSubject('');
+  private _authTokenSubject = new BehaviorSubject('');
 
   constructor(private http: Http) {
     console.log('created new config service');
@@ -56,5 +57,13 @@ export class ConfigService {
 
   get apimKey(): Observable<string> {
     return this._apimKeySubject;
+  }
+
+  setAuthToken(token: string) {
+    this._authTokenSubject.next(token);
+  }
+
+  get authToken(): Observable<string> {
+    return this._authTokenSubject;
   }
 }

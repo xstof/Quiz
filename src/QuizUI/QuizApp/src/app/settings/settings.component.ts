@@ -10,6 +10,7 @@ import { ConfigService } from '../config-service.service';
 export class SettingsComponent implements OnInit {
   baseUrl: string = null;
   apimKey: string = '';
+  authHeader: string = null;
 
   constructor(private config: ConfigService) { }
 
@@ -26,8 +27,13 @@ export class SettingsComponent implements OnInit {
     this.config.setAPIMKey(this.apimKey);
   }
 
+  setAuthHeader() {
+    this.config.setAuthToken(this.authHeader);
+  }
+
   saveSettings() {
     this.setBaseUrl();
     this.setApimKey();
+    this.setAuthHeader();
   }
 }
