@@ -28,13 +28,13 @@ $ADAPIClient = New-AzureRmADApplication -DisplayName "$($QuizAPIName)Client" `
     -ReplyUrls "https://$($QuizAPIName)Client" `
     -AvailableToOtherTenants $false
 
-# Create client credentials for both: 
-New-AzureRmADAppCredential -ApplicationId $ADAPIApp.ApplicationId -Password $ClientPassword
-New-AzureRmADAppCredential -ApplicationId $ADAPIClient.ApplicationId -Password $ClientPassword
-
-# Create service principles for both:
+# Create service principals for both:
 New-AzureRmADServicePrincipal -ApplicationId $ADAPIApp.ApplicationId
-New-AzureRmADServicePrincipal -ApplicationId $ADAPIClient.ApplicationId
+# New-AzureRmADServicePrincipal -ApplicationId $ADAPIClient.ApplicationId
+
+# Create client credentials for both: 
+# New-AzureRmADAppCredential -ApplicationId $ADAPIApp.ApplicationId -Password $ClientPassword
+New-AzureRmADAppCredential -ApplicationId $ADAPIClient.ApplicationId -Password $ClientPassword
 
 # Prepare roles to change manifest with:
 $guidForQuizMaker = [System.Guid]::NewGuid().ToString()
@@ -47,7 +47,7 @@ $roles =
     `"displayName`": `"QuizMaker`", `
     `"isEnabled`": true, `
     `"value`": `"quizmaker`", `
-    `"id`": `"$guidForQuizMaker`"
+    `"id`": `"$guidForQuizMaker`" `
 }, `
 { `
     `"allowedMemberTypes`": [`"Application`"], `
@@ -59,3 +59,5 @@ $roles =
 }"
 
 $roles | clip
+
+Write-Host "Applications and Service Principals have been created.  There is snippet copied on the clipboard for changing the roles in the AD application manifest for the API."
