@@ -35,9 +35,10 @@ Then create client credentials for both apps:
     New-AzureRmADAppCredential -ApplicationId [QUIZAPI-APPID-GOES-HERE] -Password [PASSWORD-GOES-HERE]
     New-AzureRmADAppCredential -ApplicationId [QUIZCLIENT-APPID-GOES-HERE] -Password [PASSWORD-GOES-HERE]
 
-And a service principle for at least the Quiz API:
+And a service principle for each:
 
    New-AzureRmADServicePrincipal -ApplicationId [QUIZAPI-APPID-GOES-HERE]
+   New-AzureRmADServicePrincipal -ApplicationId [QUIZCLIENT-APPID-GOES-HERE]
 
 ## Configure App Service "EasyAuth"
 Likely you'll want to use the Advanced tab, as you need an AAD where you are admin.
