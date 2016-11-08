@@ -47,7 +47,7 @@ Likely you'll want to use the Advanced tab, as you need an AAD in which you are 
 
 - Client ID: is the client ID for the Quiz API itself
 - Issuer URL: looks like `https://sts.windows.net/[YOUR-AAD-GUID-GOES-HERE]/` 
-- Allowed Token Audiences: add the valid redirect url for the Quiz API
+- Allowed Token Audiences: add the valid identifier uri for the Quiz API (there can be more than one single valid value, see the app registration manifest for valid entries under `IdentifierUris`)
 
 There should be no need for the Client Secret.
 
