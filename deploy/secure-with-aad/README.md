@@ -1,4 +1,6 @@
-# Secure the Quiz API with Azure Active Directory
+# Secure the Quiz API with Azure Active Directory - Service to Service Communications
+
+The below description guides the reader through the setup of service-to-service communication secured with AAD and App Service EasyAuth.  It is *only* applicable for service-to-service trusted-subsystem communications where client credentials can be kept secure.  DO NOT apply any of this in the context of SPA or mobile applications who have no means to keep such credentials secure.
 
 ## Create two AAD Applications
 Do so in a tenant where you are admin.
@@ -72,11 +74,8 @@ Edit the manifest and add the following to the `appRoles` entry in the manifest.
 ## Configure the Quiz API to require user assignment to get tokens for it
 In the classic portal, go to `Configure` and enable the `USER ASSIGNMENT REQUIRED TO ACCESS APP` toggle.  As of know, there needs to be explicit user / application assignment in order to get back a token for our Quiz API.  (Make sure to give consent to the Quiz API application from within the "Users" tab on the portal if the ability to toggle the switch is grayed out.)
 
-## Make the Client App register to access the Quiz API
-In the new portal, access the  `Required permissions` blade for our Client API and add the Quiz API.  Assign both roles to the Client App.
-
 ## Have the client declare it requires access to the API and to AAD graph
-The Client application will need to express to Azure AD that it requires access under some of the application roles from the Quiz API.  To express this, open the "Required Permissions" blade from the Client App and select "Add".  Type in the name for the Quiz API and select one or more application roles it wants access to.  This access will only be granted after an admin gives the Client App the permission to do so; for this we'll initiate a consent flow later.
+The Client application will need to express to Azure AD that it requires access under some of the application roles from the Quiz API.  To express this, open the `Required Permissions` blade from the Client App and select "Add".  Type in the name for the Quiz API and select one or more application roles it wants access to.  This access will only be granted after an admin gives the Client App the permission to do so; for this we'll initiate a consent flow later.
 
 Similarly, we'll add a request for the Client App to access the directory graph API with delegated permissions called "Sign in and read user profile".
 
