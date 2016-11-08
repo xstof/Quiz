@@ -39,4 +39,4 @@ $authHeader = $authResult.CreateAuthorizationHeader()
 $authHeader | clip
 
 # Output the header value
-Write-Host "Bearer Token: $authHeader"
+Write-Host "Bearer Token: $authHeader" 
