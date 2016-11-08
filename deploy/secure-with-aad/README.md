@@ -30,18 +30,18 @@ View the list of registered applications:
 
      Get-AzureRmADApplication
 
-Then create client credentials for both apps:
+Then create client credentials for both the Quiz Client:
 
-    New-AzureRmADAppCredential -ApplicationId [QUIZAPI-APPID-GOES-HERE] -Password [PASSWORD-GOES-HERE]
     New-AzureRmADAppCredential -ApplicationId [QUIZCLIENT-APPID-GOES-HERE] -Password [PASSWORD-GOES-HERE]
 
-And a service principle for each:
+And a service principle for the Quiz API:
 
    New-AzureRmADServicePrincipal -ApplicationId [QUIZAPI-APPID-GOES-HERE]
-   New-AzureRmADServicePrincipal -ApplicationId [QUIZCLIENT-APPID-GOES-HERE]
+
+Alternatively, the above steps are automated in the script `Register-AAD-Apps.ps1`.
 
 ## Configure App Service "EasyAuth"
-Likely you'll want to use the Advanced tab, as you need an AAD where you are admin.
+Likely you'll want to use the Advanced tab, as you need an AAD in which you are global admin.
 
 - Client ID: is the client ID for the Quiz API itself
 - Issuer URL: looks like `https://sts.windows.net/[YOUR-AAD-GUID-GOES-HERE]/` 
@@ -50,7 +50,7 @@ Likely you'll want to use the Advanced tab, as you need an AAD where you are adm
 There should be no need for the Client Secret.
 
 ## Add application roles to the Quiz API AAD application registration manifest
-Edit the manifest and add the following to the `appRoles` entry in the manifest.
+Edit the manifest and add the following to the `appRoles` entry in the manifest.  (If you did the application registrations through the provided powershell script, the below snippet will have been copied already to the clipboard, for your convenience.)
 
     {
         "allowedMemberTypes": ["Application"],
@@ -75,6 +75,13 @@ In the classic portal, go to `Configure` and enable the `USER ASSIGNMENT REQUIRE
 ## Make the Client App register to access the Quiz API
 In the new portal, access the  `Required permissions` blade for our Client API and add the Quiz API.  Assign both roles to the Client App.
 
+## Have the client declare it requires access to the API and to AAD graph
+The Client application will need to express to Azure AD that it requires access under some of the application roles from the Quiz API.  To express this, open the "Required Permissions" blade from the Client App and select "Add".  Type in the name for the Quiz API and select one or more application roles it wants access to.  This access will only be granted after an admin gives the Client App the permission to do so; for this we'll initiate a consent flow later.
+
+Similarly, we'll add a request for the Client App to access the directory graph API with delegated permissions called "Sign in and read user profile".
+
+Now what is left to do is to initiate a consent flow for an AAD Global Admin. 
+
 ## Approve as an admin the permissions the Client App is requiring
 Request Admin Consent through a link like this:
 
@@ -84,11 +91,11 @@ Alternatively, use the utility provided in this branch: Initiate-Admin-Consent.p
 
     Initiate-Admin-Consent.ps1 -AADTenantName [YOUR-AAD-GUID-GOES-HERE] -ClientID [YOUR-CLIENT-APP-ID-GOES-HERE]
 
-Then login with an administrative (global admin) account and approve the requested permissions for the application.  Upon approval, those permissions will be granted.  (In this case: permission for the client app to access the api with the roles specified.)
+Then login with an administrative (global admin) account and approve the requested permissions for the application.  Note that the permissions requested are the same as the one the Client App expressed it would require to function properly.  Upon approval, those permissions will be granted.  (In this case: permission for the client app to access the api with the roles specified and the delegated permissions for accessing AAD.)
 
 ## Get a token and call the Quiz API with it
 For this, you may use the PowerShell utility that comes in this branch: get-token.ps1
 
     .\get-token.ps1 -AADTenantName [YOUR-AAD-GUID-GOES-HERE] -AADClientID [YOUR-CLIENT-APP-ID-GOES-HERE] -ClientIDPassword [YOUR-CLIENT-PASSWORD-GOES-HERE] -AADAudienceClientId [APP-ID-FOR-RESOURCE-To-ACCESS-GOES-HERE]
 
-    
+Note that for the `AADAudienceClientId` and `AADClientID` parameters, you may use any value that is a valid identifierUri for the respective application.  Check their AAD application manifest for the details. (An application might be known to AAD under more than one valid identifier.)

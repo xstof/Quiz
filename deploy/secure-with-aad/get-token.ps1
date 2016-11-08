@@ -5,7 +5,7 @@
 [CmdletBinding()]
 Param(
   [Parameter(Mandatory=$True)]
-  [string]$AADTenantName, # example: yourdomain.onmicrosoft.com
+  [string]$AADTenantId, # example: azure ad id associated with yourdomain.onmicrosoft.com
  
   [Parameter(Mandatory=$True)]
   [string]$AADClientID,
@@ -25,7 +25,7 @@ $adalforms = "${env:ProgramFiles(x86)}\Microsoft SDKs\Azure\PowerShell\ServiceMa
 [System.Reflection.Assembly]::LoadFrom($adalforms)
 
 # Set Authority to Azure AD Tenant
-$authority = "https://login.windows.net/$AADTenantName"
+$authority = "https://login.windows.net/$AADTenantId"
 
 # Create Authentication Context tied to Azure AD Tenant
 $authContext = New-Object "Microsoft.IdentityModel.Clients.ActiveDirectory.AuthenticationContext" -ArgumentList $authority
