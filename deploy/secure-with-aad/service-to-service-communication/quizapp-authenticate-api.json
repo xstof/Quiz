@@ -15,39 +15,34 @@
             "minLength": 1
         }
     },
-    "variables": {},
     "resources": [
         {
             "name": "[parameters('QuizAPIWebAppName')]",
             "type": "Microsoft.Web/sites",
             "location": "[resourceGroup().location]",
             "apiVersion": "2015-08-01",
+            "properties": {},
             "resources": [
                 {
-                    "name": "web",
+                    "name": "authsettings",
                     "type": "config",
                     "dependsOn": [
                         "[concat('Microsoft.Web/sites/', parameters('QuizAPIWebAppName'))]"
                     ],
                     "apiVersion": "2015-08-01",
                     "properties": {
-                        "siteAuthEnabled": true,
-                        "siteAuthSettings": {
-                            "enabled": true,
-                            "unauthenticatedClientAction": 0,
-                            "tokenStoreEnabled": true,
-                            "allowedExternalRedirectUrls": null,
-                            "defaultProvider": 0,
-                            "clientId": "[parameters('AADApiClientId')]",
-                            "issuer": "[concat('https://sts.windows.net/', parameters('AADTenantId'), '/')]",
-                            "allowedAudiences": [
-                                "[concat('https://', parameters('QuizAPIWebAppName'), '.azurewebsites.net')] ",
-                                "[parameters('AADApiClientId')]"
-                            ],
-                            "isAadAutoProvisioned": false,
-                            "aadClientId": "[parameters('AADApiClientId')]",
-                            "openIdIssuer": "[concat('https://sts.windows.net/', parameters('AADTenantId'), '/')]"
-                        }
+                        "enabled": true,
+                        "unauthenticatedClientAction": 0,
+                        "tokenStoreEnabled": true,
+                        "clientId": "[parameters('AADApiClientId')]",
+                        "issuer": "[concat('https://sts.windows.net/', parameters('AADTenantId'), '/')]",
+                        "allowedAudiences": [
+                            "[concat('https://', parameters('QuizAPIWebAppName'), '.azurewebsites.net')]",
+                            "[parameters('AADApiClientId')]"
+                        ],
+                        "isAadAutoProvisioned": false,
+                        "aadClientId": "[parameters('AADApiClientId')]",
+                        "openIdIssuer": "[concat('https://sts.windows.net/', parameters('AADTenantId'), '/')]"
                     }
                 }
             ]
