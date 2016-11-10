@@ -71,8 +71,8 @@ Edit the manifest and add the following to the `appRoles` entry in the manifest.
         "id": "[NEW-GUID-GOES-HERE]"
     }
 
-## Configure the Quiz API to require user assignment to get tokens for it
-In the classic portal, go to `Configure` and enable the `USER ASSIGNMENT REQUIRED TO ACCESS APP` toggle.  As of know, there needs to be explicit user / application assignment in order to get back a token for our Quiz API.  (Make sure to give consent to the Quiz API application from within the "Users" tab on the portal if the ability to toggle the switch is grayed out.)
+## Configure the Quiz API ServicePrincipal to require user assignment to get tokens for it
+In the portal, go to `Properties` of the ServicePrincipal for the API and enable the `User assignment required?` toggle.  As of know, there needs to be explicit user / application assignment in order to get back a token for our Quiz API.  This switch is only visible for AAD Global Admins, so make sure you are Global Admin before trying this.
 
 ## Have the client declare it requires access to the API and to AAD graph
 The Client application will need to express to Azure AD that it requires access under some of the application roles from the Quiz API.  To express this, open the `Required Permissions` blade from the Client App and select "Add".  Type in the name for the Quiz API and select one or more application roles it wants access to.  This access will only be granted after an admin gives the Client App the permission to do so; for this we'll initiate a consent flow later.
@@ -95,6 +95,6 @@ Then login with an administrative (global admin) account and approve the request
 ## Get a token and call the Quiz API with it
 For this, you may use the PowerShell utility that comes in this branch: get-token.ps1
 
-    .\get-token.ps1 -AADTenantName [YOUR-AAD-GUID-GOES-HERE] -AADClientID [YOUR-CLIENT-APP-ID-GOES-HERE] -ClientIDPassword [YOUR-CLIENT-PASSWORD-GOES-HERE] -AADAudienceClientId [APP-ID-FOR-RESOURCE-To-ACCESS-GOES-HERE]
+    .\get-token.ps1 -AADTenantId [YOUR-AAD-GUID-GOES-HERE] -AADClientID [YOUR-CLIENT-APP-ID-GOES-HERE] -ClientIDPassword [YOUR-CLIENT-PASSWORD-GOES-HERE] -AADAudienceClientId [APP-ID-FOR-RESOURCE-To-ACCESS-GOES-HERE]
 
 Note that for the `AADAudienceClientId` and `AADClientID` parameters, you may use any value that is a valid identifierUri for the respective application.  Check their AAD application manifest for the details. (An application might be known to AAD under more than one valid identifier.)

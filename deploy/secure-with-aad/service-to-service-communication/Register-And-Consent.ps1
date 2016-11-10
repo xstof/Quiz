@@ -5,13 +5,16 @@
 [CmdletBinding()]
 Param(
   [Parameter(Mandatory=$True)]
-  [string]$AADTenantName, # example: yourdomain.onmicrosoft.com
+  [string]$AADTenantId,
  
   [Parameter(Mandatory=$True)]
   [string]$QuizAPIName,
 
   [Parameter(Mandatory=$True)]
-  [string]$ClientPassword
+  [string]$ClientPassword,
+
+  [Parameter()] 
+  [switch] $NoLogin=$false # When set, the user will not be forced to log into the tenant he provided
 )
 
 # Gets authorization token for use with Graph API
@@ -53,9 +56,16 @@ function PostToGraphApi
     return $result
 }
 
-$token = GetAuthToken -TenantName $AADTenantName
+# Ensure user logs into the right tenant (admin rights required for consent):
+if($NoLogin -eq $false){
+    Login-AzureRmAccount -TenantId $AADTenantId
+}
+
+
+$token = GetAuthToken -TenantName $AADTenantId
 $tokenAsString = $token.CreateAuthorizationHeader()
-Write-Host "Got token to use with Graph API: $tokenAsString"
+Write-Host "Got token to use with Graph API"
+#Write-Host "$tokenAsString"
 $authHeader = @{
     "Content-Type"="application/json";
     "Authorization"=$token.CreateAuthorizationHeader()
@@ -114,17 +124,24 @@ $apiAADApplicationDefinition = @{
 }
 
 # Register API
-$ApiAADApplication = PostToGraphApi -TenantName $AADTenantName -AuthHeader $authHeader -EntityType "applications" -Body $apiAADApplicationDefinition
+$ApiAADApplication = PostToGraphApi -TenantName $AADTenantId -AuthHeader $authHeader -EntityType "applications" -Body $apiAADApplicationDefinition
 $ApiAADApplicationId = $ApiAADApplication.appId
 Write-Host "Registered api as an application in AAD"
 
 # Create API Service Principal
-New-AzureRmADServicePrincipal -ApplicationId $ApiAADApplicationId
+Write-Host "Creating ServicePrincipal for api application registration with id: $ApiAADApplicationId"
+# Too little control by doing: New-AzureRmADServicePrincipal -ApplicationId $ApiAADApplicationId
+# See https://msdn.microsoft.com/Library/Azure/Ad/Graph/api/entity-and-complex-type-reference#serviceprincipal-entity
+$apiAADServicePrincipalDefinition = @{
+    "appId"=$ApiAADApplicationId;
+    "appRoleAssignmentRequired"=$True; # This ensure "user assignment required toggle is set to "Yes"
+}
+$apiAADServicePrincipal = PostToGraphApi -TenantName $AADTenantId -AuthHeader $authHeader -EntityType "servicePrincipals" -Body $apiAADServicePrincipalDefinition
 Write-Host "Created ServicePrincipal for api"
 
 # Register API Client
 $clientAADIdentifierUris = @("https://$($QuizAPIName)Client")
-$clientAADRedirectUris = @("https://$($QuizAPIName)Client")
+$clientAADRedirectUris = @("https://$($QuizAPIName)Client", "https://$($QuizAPIName).azurewebsites.net/.auth/login/aad/callback")
 $clientAADKeyId = [System.Guid]::NewGuid().ToString()
 
 # See https://msdn.microsoft.com/Library/Azure/Ad/Graph/api/entity-and-complex-type-reference#application-entity
@@ -168,12 +185,17 @@ $clientAADApplicationDefinition = @{
     );
 }
 
-$ClientAADApplication = PostToGraphApi -TenantName $AADTenantName -AuthHeader $authHeader -EntityType "applications" -Body $clientAADApplicationDefinition
+$ClientAADApplication = PostToGraphApi -TenantName $AADTenantId -AuthHeader $authHeader -EntityType "applications" -Body $clientAADApplicationDefinition
 $ClientAADApplicationId = $ClientAADApplication.appId
-Write-Host "Registered api as an application in AAD"
+Write-Host "Registered api as an application in AAD.  Waiting some seconds now before initiating consent flow."
+Start-Sleep 20
 
 Write-Host "Initiating admin consent flow now"
-.\Initiate-Admin-Consent.ps1 -AADTenantName $AADTenantName -ClientID $ClientAADApplicationId
+.\Initiate-Admin-Consent.ps1 -AADTenantName $AADTenantId -ClientID $ClientAADApplicationId
 
-Write-Host "For testig purposes you might want to try get a token using the client credentials of the api client."
-Write-Host "Try executing: .\Get-Token.ps1 -AADTenantId $AADTenantName -AADClientID $ClientAADApplicationId -ClientIDPassword $ClientPassword -AADAudienceClientId $ApiAADApplicationId"
+Write-Host "For testing purposes you might want to try get a token using the client credentials of the api client."
+Write-Host "Tokens are cached so try executing in a NEW console: "
+Write-Host ".\Get-Token.ps1 -AADTenantId $AADTenantId -AADClientID $ClientAADApplicationId -ClientIDPassword $ClientPassword -AADAudienceClientId $ApiAADApplicationId"
+Write-Host ""
+Write-Host "To configure easy auth on the api, you might want to call into ./Secure-API.ps1 as follows: "
+Write-Host ".\Secure-API.ps1 -SubscriptionName `"[YOUR-SUBSCR-NAME]`" -RGName [YOUR-RG-NAME] -QuizAPIWebAppName [YOUR-API-WEBAPP-NAME] -AADApiClientId $ApiAADApplicationId -AADTenantId $AADTenantId"

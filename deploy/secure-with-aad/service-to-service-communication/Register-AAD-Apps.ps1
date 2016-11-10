@@ -4,7 +4,7 @@
 [CmdletBinding()]
 Param(
   [Parameter(Mandatory=$True)]
-  [string]$AADTenantName, # example: yourdomain.onmicrosoft.com
+  [string]$AADTenantId,
  
   [Parameter(Mandatory=$True)]
   [string]$QuizAPIName,
@@ -13,6 +13,9 @@ Param(
   [string]$ClientPassword
   
 )
+
+# Login to a tenant in which you have admin privileges:
+Login-AzureRmAccount -TenantId $AADTenantId
 
 # Register Quiz API itself as application in AAD:
 $ADAPIApp = New-AzureRmADApplication -DisplayName "$QuizAPIName" `
@@ -28,12 +31,10 @@ $ADAPIClient = New-AzureRmADApplication -DisplayName "$($QuizAPIName)Client" `
     -ReplyUrls "https://$($QuizAPIName)Client" `
     -AvailableToOtherTenants $false
 
-# Create service principals for both:
+# Create service principals for the api:
 New-AzureRmADServicePrincipal -ApplicationId $ADAPIApp.ApplicationId
-# New-AzureRmADServicePrincipal -ApplicationId $ADAPIClient.ApplicationId
 
-# Create client credentials for both: 
-# New-AzureRmADAppCredential -ApplicationId $ADAPIApp.ApplicationId -Password $ClientPassword
+# Create client credentials for the api client: 
 New-AzureRmADAppCredential -ApplicationId $ADAPIClient.ApplicationId -Password $ClientPassword
 
 # Prepare roles to change manifest with:
