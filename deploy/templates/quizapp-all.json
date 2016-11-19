@@ -54,6 +54,10 @@
         "Standard_RAGRS",
         "Premium_LRS"
       ]
+    },
+    "AiLocation": {
+      "type": "string",
+      "defaultValue": "West Europe"
     }
   },
   "variables": {
@@ -109,7 +113,8 @@
           "type": "config",
           "apiVersion": "2015-08-01",
           "dependsOn": [
-            "[concat('Microsoft.Web/sites/', parameters('QuizAPIWebAppName'))]"
+            "[concat('Microsoft.Web/sites/', parameters('QuizAPIWebAppName'))]",
+            "[resourceId('Microsoft.Insights/components', concat(parameters('QuizAPIWebAppName'), '-ai'))]"
           ],
           "tags": {
             "displayName": "WebAppSettings"
@@ -117,7 +122,8 @@
           "properties": {
             "AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('AzureWebJobStorageNameForAPI'),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('AzureWebJobStorageNameForAPI')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
             "AzureWebJobsDashboard": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('AzureWebJobStorageDashboardNameForAPI'),';AccountKey=', listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('AzureWebJobStorageDashboardNameForAPI')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value)]",
-            "WEBSITE_LOAD_CERTIFICATES": "*"
+            "WEBSITE_LOAD_CERTIFICATES": "*",
+            "AiInstrumentationKey": "[reference(concat('Microsoft.Insights/components/', parameters('QuizAPIWebAppName'), '-ai')).InstrumentationKey]"
           }
         },
         {
@@ -277,6 +283,25 @@
       "properties": {
         "accountType": "[parameters('AzureWebJobStorageType')]"
       }
+    },
+    {
+      "name": "[concat(parameters('QuizAPIWebAppName'), '-ai')]",
+      "type": "Microsoft.Insights/components",
+      "location": "[parameters('AiLocation')]",
+      "apiVersion": "2014-04-01",
+      "dependsOn": [
+        "[concat('Microsoft.Web/sites/', parameters('QuizUIWebAppName'))]"
+      ],
+      "tags": {
+        "applicationType": "web",
+        "[concat('hidden-link:', resourceId('Microsoft.Web/sites', parameters('QuizAPIWebAppName')))]": "Resource"
+      },
+      "properties": {
+        "ApplicationId": "[parameters('QuizAPIWebAppName')]",
+        "Name": "[concat(parameters('QuizAPIWebAppName'), '-ai')]",
+        "Application_Type": "web",
+        "Flow_Type": "web"
+      }
     }
   ],
   "outputs": {
@@ -288,9 +313,13 @@
       "type": "string",
       "value": "[parameters('AppServicePlanName')]"
     },
-    "quizAPIWebAppName" : {
+    "quizAPIWebAppName": {
       "type": "string",
       "value": "[parameters('QuizAPIWebAppName')]"
+    },
+    "appInsightInstrumentationKey":{
+      "type": "string",
+            "value": "[reference(concat('Microsoft.Insights/components/', parameters('QuizAPIWebAppName'), '-ai')).InstrumentationKey]"
     }
   }
 }
