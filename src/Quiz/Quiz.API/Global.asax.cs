@@ -2,6 +2,7 @@
 using Autofac.Integration.WebApi;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Web;
@@ -34,6 +35,16 @@ namespace Quiz.API
             // Set the dependency resolver to be Autofac.
             var container = builder.Build();
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+            #endregion
+
+            #region App Insights instrumentation
+            //Setup App Insights Instrumentation key based on an Application Setting
+            if (ConfigurationManager.AppSettings["AiInstrumentationKey"] != null &&
+                ConfigurationManager.AppSettings["AiInstrumentationKey"] != "")
+            {
+                Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration.Active.InstrumentationKey =
+                    ConfigurationManager.AppSettings["AiInstrumentationKey"];
+            }
             #endregion
         }
     }
