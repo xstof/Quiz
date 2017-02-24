@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { appRoutingProviders, routing } from './app.routing';
 
+import { appRoutingProviders, routing } from './app.routing';
 import { ConfigService } from './config-service.service';
 import { QuizAppComponent } from './quiz-app/quiz-app.component';
 import { SettingsComponent } from './settings/settings.component';
@@ -41,12 +41,12 @@ import { AuthenticatedHttpClient } from './authenticatedHttpClient';
     ScoringService,
     {
       provide: AuthenticatedHttpClient,
-      useFactory: (http: Http, config: ConfigService) => {
-        return new AuthenticatedHttpClient(http, config);
-      },
+      useFactory: provideAuthenticatedHttpClient,
       deps: [Http, ConfigService]
     }
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+export function provideAuthenticatedHttpClient(http: Http, config: ConfigService) { return new AuthenticatedHttpClient(http, config);}  
