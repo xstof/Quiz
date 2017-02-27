@@ -16,11 +16,13 @@ var apibaseurl = process.env.APIBASEURL || "(no endpoint in env vars)";
 
 // serve api base url
 app.get('/apibaseurl', function (req, res) {
+    console.log('QuizApp received request for API base url');
     res.json({apibaseurl: apibaseurl});
 });
 
 // use index.html as our root
 app.get('/*', function (req, res) {
+    console.log('QuizApp received request for root - serving up index.html from: ' + path.join(__dirname,'index.html'));
     res.sendFile(path.join(__dirname,'index.html'));
 });
 
