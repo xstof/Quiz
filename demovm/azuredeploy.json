@@ -16,9 +16,9 @@
     },
     "vmVisualStudioVersion": {
       "type": "string",
-      "defaultValue": "VS-2015-Comm-VSU3-AzureSDK-291-WS2012R2",
+      "defaultValue": "VS-2015-Comm-VSU3-AzureSDK-29-WS2012R2",
       "allowedValues": [
-        "VS-2015-Comm-VSU3-AzureSDK-291-WS2012R2"
+        "VS-2015-Comm-VSU3-AzureSDK-29-WS2012R2"
       ],
       "metadata": {
         "description": "Which version of Visual Studio you would like to deploy"
