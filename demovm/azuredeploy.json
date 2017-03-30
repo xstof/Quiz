@@ -179,7 +179,11 @@
               "fileUris": [
                 "https://gist.githubusercontent.com/xstof/021f0a1e85783e4b43156c07ffb51bcc/raw/quizdemo-install-usingcreds.ps1"
               ],
-              "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File quizdemo-install-usingcreds.ps1 -vmAdminUsername ', parameters('vmAdminUserName'), ' -vmAdminPassword \"', parameters('vmAdminPassword'), '\"')]"
+               "protectedSettings": {
+            "commandToExecute": "concat('powershell -ExecutionPolicy Unrestricted -File quizdemo-install-usingcreds.ps1 -vmAdminUsername ', parameters('vmAdminUserName'), ' -vmAdminPassword \"', parameters('vmAdminPassword'), '\"')]"
+        }
+
+              
             }
           }
         }
