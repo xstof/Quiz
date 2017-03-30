@@ -177,9 +177,9 @@
             "autoUpgradeMinorVersion": true,
             "settings": {
               "fileUris": [
-                "https://gist.githubusercontent.com/xstof/021f0a1e85783e4b43156c07ffb51bcc/raw/quizdemo-install.ps1"
+                "https://gist.githubusercontent.com/xstof/021f0a1e85783e4b43156c07ffb51bcc/raw/quizdemo-install-usingcreds.ps1"
               ],
-              "commandToExecute": "powershell.exe -ExecutionPolicy Unrestricted -File quizdemo-install.ps1"
+              "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File quizdemo-install.ps1 -vmAdminUsername ', parameters('vmAdminUserName'), ' -vmAdminPassword \"', parameters('vmAdminPassword'), '\"')]"
             }
           }
         }
