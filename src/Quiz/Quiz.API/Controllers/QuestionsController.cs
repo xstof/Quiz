@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace Quiz.API.Controllers
 {
@@ -20,7 +21,7 @@ namespace Quiz.API.Controllers
         // GET api/quizes/{quizid}/questions
         [SwaggerOperation("GetAllQuizQuestions")]
         [SwaggerResponse(HttpStatusCode.NotFound)]
-        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.OK, type: typeof(IEnumerable<QuizQuestion>))]
         [Route("api/quizzes/{quizid}/questions")]
         public HttpResponseMessage Get(string quizid)
         {
@@ -39,7 +40,7 @@ namespace Quiz.API.Controllers
 
         // GET api/quizes/{quizid}/questions/{questionid}
         [SwaggerOperation("GetQuizQuestionById")]
-        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.OK, type: typeof(QuizQuestion))]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         [Route("api/quizzes/{quizid}/questions/{questionid}", Name = "getsinglequestion")]
         public HttpResponseMessage Get(string quizid, string questionid)

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace Quiz.API.Controllers
 {
@@ -20,6 +21,7 @@ namespace Quiz.API.Controllers
 
         // GET api/quizes
         [SwaggerOperation("GetAllQuizzes")]
+        [ResponseType(typeof(IEnumerable<Model.Quiz>))]
         public IEnumerable<Model.Quiz> Get()
         {
             return repo.AllQuizes();
@@ -27,7 +29,7 @@ namespace Quiz.API.Controllers
 
         // GET api/quizes/{quizid} 
         [SwaggerOperation("GetQuizById")]
-        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.OK, type:typeof(Quiz.Model.Quiz))]
         [SwaggerResponse(HttpStatusCode.NotFound)]
         public HttpResponseMessage Get(string id)
         {
@@ -44,7 +46,7 @@ namespace Quiz.API.Controllers
 
         // POST api/quizes
         [SwaggerOperation("CreateQuiz")]
-        [SwaggerResponse(HttpStatusCode.Created)]
+        [SwaggerResponse(HttpStatusCode.Created, type: typeof(Quiz.Model.Quiz))]
         public HttpResponseMessage Post([FromBody]Model.Quiz quiz)
         {
             var newQuiz = repo.CreateNewQuiz(quiz);
