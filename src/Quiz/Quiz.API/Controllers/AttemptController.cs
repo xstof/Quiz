@@ -27,7 +27,7 @@ namespace Quiz.API.Controllers
       
         [SwaggerOperation("GetAttempt")]
         [SwaggerResponse(HttpStatusCode.NotFound)]
-        [SwaggerResponse(HttpStatusCode.OK)]
+        [SwaggerResponse(HttpStatusCode.OK, type:typeof(Model.Attempt))]
         [Route("api/quizzes/{quizid}/attempts/{attemptid}", Name = "getattempt")]
         public HttpResponseMessage Get(string quizid, string attemptid)
         {
@@ -39,7 +39,7 @@ namespace Quiz.API.Controllers
         
         [SwaggerOperation("StartAttempt")]
         [SwaggerResponse(HttpStatusCode.NotFound)]
-        [SwaggerResponse(HttpStatusCode.Created, type: typeof(Quiz.Model.Attempt))]
+        [SwaggerResponse(HttpStatusCode.OK, type: typeof(Quiz.Model.Attempt))]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [Route("api/quizzes/{quizid}/attempts")]
         public HttpResponseMessage Post(string quizid, [FromBody] AttemptRequest attemptReq)
