@@ -7,6 +7,21 @@
   <PropertyGroup>
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="bower.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove=".bowerrc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="wwwroot\lib\bootstrap\dist\css\bootstrapdarkly.css" />
+    <Content Include="wwwroot\lib\bootstrap\dist\css\bootstrapdarkly.css.map" />
+    <Content Include="wwwroot\lib\bootstrap\dist\css\bootstrapdarkly.min.css" />
+    <Content Include="wwwroot\lib\bootstrap\dist\css\bootstrapdarkly.min.css.map" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.0.2" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="2.0.1" />

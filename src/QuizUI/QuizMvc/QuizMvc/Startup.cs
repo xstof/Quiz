@@ -29,13 +29,24 @@ namespace QuizMvc
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            var appSettings = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettings);
+
+
             // Add framework services.
             services.AddMvc();
             services.AddAutoMapper();
 
+            //Get value from appsettings
+            var apiUri = "";
+            if(Configuration.GetSection("appSettings")["ApiHostUri"] != null &&
+                Configuration.GetSection("appSettings")["ApiHostUri"] != "") { 
+                apiUri = Configuration.GetSection("appSettings")["ApiHostUri"];
+            }
             // Add autorest generated quizclient proxy.
             services.AddScoped<IQuizAPIClient, QuizAPIClient>(
-                    prov => new QuizAPIClient(new Uri("http://quizhackapi.azurewebsites.net"))
+                    prov => new QuizAPIClient(new Uri(apiUri))
                 );
         }
 
