@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Visual Studio Development VM for Quiz Demo",
+  "description": "This template creates a Visual Studio 2015 Community Edition VM for use with the Quiz demo.  It creates the VM in a new vnet, storage account, nic, and public ip with the new compute stack.",
+  "summary": "Creates a Visual Studio 2015 Community Edition VM for use with the Quiz demo",
+  "githubUsername": "xstof",
+  "dateUpdated": "2016-10-14"
+}
